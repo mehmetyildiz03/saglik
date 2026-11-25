@@ -819,6 +819,178 @@ export const catalogue=[
       "mg/dL",
       "µmol/L"
     ]
+  ],
+  [
+    "urine-ph",
+    "İdrar pH",
+    "urine",
+    [
+      "İdrar pH",
+      "pH (idrar)"
+    ],
+    [
+      "1"
+    ]
+  ],
+  [
+    "urine-sg",
+    "İdrar dansitesi",
+    "urine",
+    [
+      "İdrar dansitesi",
+      "Dansite (idrar)",
+      "İdrar özgül ağırlığı",
+      "Specific gravity (urine)"
+    ],
+    [
+      "1"
+    ]
+  ],
+  [
+    "urine-protein-quant",
+    "İdrar protein (konsantrasyon)",
+    "urine",
+    [
+      "İdrar protein (kantitatif)",
+      "İdrar protein (konsantrasyon)"
+    ],
+    [
+      "mg/dL",
+      "mg/L",
+      "g/L"
+    ]
+  ],
+  [
+    "urine-albumin",
+    "İdrar albümin (konsantrasyon)",
+    "urine",
+    [
+      "İdrar albümin",
+      "İdrar mikroalbümin"
+    ],
+    [
+      "mg/L",
+      "mg/dL"
+    ]
+  ],
+  [
+    "urine-creat",
+    "İdrar kreatinin",
+    "urine",
+    [
+      "İdrar kreatinin",
+      "Kreatinin (idrar)"
+    ],
+    [
+      "mg/dL",
+      "mmol/L"
+    ]
+  ],
+  [
+    "urine-rbc",
+    "İdrar eritrosit (mikroskopi)",
+    "urine",
+    [
+      "İdrar eritrosit (mikroskopi)",
+      "İdrar RBC (mikroskopi)"
+    ],
+    [
+      "/HPF",
+      "hücre/µL"
+    ]
+  ],
+  [
+    "urine-wbc",
+    "İdrar lökosit (mikroskopi)",
+    "urine",
+    [
+      "İdrar lökosit (mikroskopi)",
+      "İdrar WBC (mikroskopi)"
+    ],
+    [
+      "/HPF",
+      "hücre/µL"
+    ]
+  ],
+  [
+    "urine-nitrite",
+    "İdrar nitrit",
+    "urine",
+    [
+      "İdrar nitrit",
+      "Nitrit (idrar)"
+    ],
+    []
+  ],
+  [
+    "urine-le",
+    "İdrar lökosit esteraz",
+    "urine",
+    [
+      "İdrar lökosit esteraz",
+      "Lökosit esteraz (idrar)"
+    ],
+    []
+  ],
+  [
+    "urine-protein",
+    "İdrar protein (strip)",
+    "urine",
+    [
+      "İdrar protein (strip)",
+      "Protein (idrar, strip)"
+    ],
+    []
+  ],
+  [
+    "urine-glucose",
+    "İdrar glukoz (strip)",
+    "urine",
+    [
+      "İdrar glukoz (strip)",
+      "Glukoz (idrar, strip)"
+    ],
+    []
+  ],
+  [
+    "urine-ketone",
+    "İdrar keton (strip)",
+    "urine",
+    [
+      "İdrar keton",
+      "Keton (idrar)"
+    ],
+    []
+  ],
+  [
+    "urine-blood",
+    "İdrar kan (strip)",
+    "urine",
+    [
+      "İdrar kan (strip)",
+      "Kan (idrar, strip)"
+    ],
+    []
+  ],
+  [
+    "urine-bili",
+    "İdrar bilirubin (strip)",
+    "urine",
+    [
+      "İdrar bilirubin",
+      "Bilirubin (idrar)"
+    ],
+    []
+  ],
+  [
+    "urine-urobilinogen",
+    "İdrar ürobilinojen (strip, nitel)",
+    "urine",
+    [
+      "İdrar ürobilinojen (strip, nitel)",
+      "Ürobilinojen (idrar, nitel)"
+    ],
+    []
   ]
 ];
 export const systems=[
@@ -877,6 +1049,13 @@ export const systems=[
     "✺",
     "Bağışıklık yanıtı",
     "CRP ve sedimentasyon özgül bir hastalık tanısı değildir."
+  ],
+  [
+    "urine",
+    "İdrar tahlilleri",
+    "◒",
+    "Fiziksel, kimyasal ve mikroskopik sonuçlar",
+    "Strip, mikroskopi ve kantitatif analizler aynı ölçüm değildir. İdrar nitritinin negatif olması tek başına enfeksiyonu dışlamaz."
   ],
   [
     "other",

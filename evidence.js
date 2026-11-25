@@ -180,6 +180,70 @@ export const evidence=[
     ],
     "summary": "Test seçimi yaşa ve ikincil tiroid bozukluğu şüphesine göre değişir. Yüksek doz biyotin bazı testlerde yalancı yüksek ya da düşük sonuçlara yol açabilir.",
     "scope": "Tek TSH sonucuyla tanı veya ilaç dozu önerisi yapılmaz."
+  },
+  {
+    "id": "urinalysis",
+    "group": "urine",
+    "title": "İdrar analizi: üç farklı inceleme",
+    "org": "NIH / MedlinePlus",
+    "year": "2024",
+    "kind": "Klinik bağlam",
+    "url": "https://medlineplus.gov/urinalysis.html",
+    "section": "Summary",
+    "tests": [
+      "urine-ph",
+      "urine-sg",
+      "urine-protein-quant",
+      "urine-albumin",
+      "urine-creat",
+      "urine-rbc",
+      "urine-wbc",
+      "urine-protein",
+      "urine-glucose",
+      "urine-ketone",
+      "urine-blood",
+      "urine-bili",
+      "urine-urobilinogen"
+    ],
+    "summary": "İdrar analizi fiziksel özellikleri, kimyasal maddeleri ve mikroskopik bulguları inceler. Strip sonucu ile nicel konsantrasyon veya mikroskopik hücre sayısı birbirinin yerine geçmez.",
+    "scope": "Eğitim amaçlı; tek bir bulgu ile tanı veya tedavi önerisi yapılmaz."
+  },
+  {
+    "id": "urine-nitrite",
+    "group": "urine",
+    "title": "Nitrit: negatif sonuç enfeksiyonu dışlamaz",
+    "org": "NIH / MedlinePlus",
+    "year": "2024",
+    "kind": "Klinik bağlam",
+    "url": "https://medlineplus.gov/lab-tests/nitrites-in-urine/",
+    "section": "What do the results mean?",
+    "tests": [
+      "urine-nitrite",
+      "urine-le"
+    ],
+    "summary": "Bazı bakteriler nitrit üretmez; bu nedenle negatif nitrit sonucu enfeksiyonu tek başına dışlamaz. Belirtiler, diğer testler ve gerektiğinde kültür değerlendirilir.",
+    "scope": "Otomatik enfeksiyon tanısı veya antibiyotik önerisi yoktur."
+  },
+  {
+    "id": "liver-markers",
+    "group": "liver",
+    "title": "Karaciğer enzimleri ile işlev göstergeleri farklıdır",
+    "org": "AASLD Liver Fellow Network",
+    "year": "2025",
+    "kind": "Klinik eğitim",
+    "url": "https://www.aasld.org/liver-fellow-network/core-series/back-basics/how-approach-elevated-liver-enzymes",
+    "section": "What are liver enzymes?",
+    "tests": [
+      "alt",
+      "ast",
+      "alp",
+      "ggt",
+      "bilirubin",
+      "direct-bili",
+      "albumin"
+    ],
+    "summary": "ALT, AST, ALP ve GGT doku hasarıyla ilişkili olabilir; albümin ve pıhtılaşma göstergeleri farklı bilgi verir. AST ve ALP karaciğer dışı dokulardan da kaynaklanabilir.",
+    "scope": "Eğitim yazısı; klinik kılavuz veya tanı motoru değildir."
   }
 ];
 export const forTest=id=>evidence.filter(s=>s.tests.includes(id));

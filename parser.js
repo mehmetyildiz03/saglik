@@ -1,4 +1,5 @@
 import {catalogue,norm} from './catalog.js';
+import {parseResult,isQualitativeTest,qualitativeValue} from './measurement.js';
 const aliases={
  'mg/dL':['mg/dl','mg/dℓ'], 'g/dL':['g/dl'], 'ng/mL':['ng/ml'], 'pg/mL':['pg/ml'],
  'µg/dL':['ug/dL','μg/dL','mcg/dL','µg/dl'], 'µg/L':['ug/L','μg/L','mcg/L'],
@@ -8,6 +9,7 @@ const aliases={
  '10^6/µL':['10⁶/µL','10⁶/uL','10⁶/μL','10^6/uL','10^6/μL','x10^6/µL','x10^6/uL','x10^6/μL','×10⁶/µL','10*6/uL'],
  '10^9/L':['10⁹/L','x10^9/L','×10⁹/L','10*9/L'],
  '10^12/L':['10¹²/L','x10^12/L','×10¹²/L','10*12/L'],
+ '/HPF':['/hpf','/BBA'], 'hücre/µL':['hücre/uL','hücre/μL'],
  'K/µL':['K/uL','K/μL'], 'M/µL':['M/uL','M/μL'],
  'mL/min/1.73 m²':['mL/min/1.73m²','mL/min/1.73 m2','mL/dk/1.73 m²','mL/dk/1.73 m2','mL/dk/1.73m2']
 };
@@ -19,26 +21,42 @@ export function normalizeUnit(raw,allowed){
 function num(s){const t=String(s??'').trim();if(!/^-?\d+(?:[.,]\d+)?$/.test(t))return null;const n=Number(t.replace(',','.'));return Number.isFinite(n)?n:null}
 const names=catalogue.flatMap(t=>[t[1],...t[3]].map(a=>({t,a}))).sort((a,b)=>b.a.length-a.a.length);
 const flagPattern='H|L|Y|D|Yüksek|Düşük|\\*';
-const headPattern=new RegExp('^(?:('+flagPattern+')\\s+)?(-?\\d+(?:[.,]\\d+)?)(?:\\s+('+flagPattern+'))?\\s+(.+)$','i');
+const headPattern=new RegExp('^(?:('+flagPattern+')\\s+)?((?:<=|>=|<|>|≤|≥)?\\s*-?\\d+(?:[.,]\\d+)?)(?:\\s+('+flagPattern+'))?(?:\\s+(.+))?$','i');
 const trailingFlag=new RegExp('(?:^|\\s)('+flagPattern+')$','i');
+function parseReference(suffix){
+ if(!suffix)return {low:null,high:null,referenceText:''};
+ const b=suffix.match(/^(-?\d+(?:[.,]\d+)?)\s*[-–−]\s*(-?\d+(?:[.,]\d+)?)$/);
+ if(b){const low=num(b[1]),high=num(b[2]);return low!==null&&high!==null&&low<=high?{low,high,referenceText:''}:null}
+ if(/^(?:<=|>=|<|>|≤|≥)\s*-?\d+(?:[.,]\d+)?$/.test(suffix))return {low:null,high:null,referenceText:suffix};
+ return null;
+}
 export function parseLine(line){
  const raw=String(line).trim();if(!raw||raw.length>500)return null;
  const text=unitSyntax(raw);const found=[];
  for(const {t,a} of names){
   const name=unitSyntax(a);if(norm(text.slice(0,name.length))!==norm(name)||!/\s/.test(text.charAt(name.length)))continue;
-  const rest=text.slice(name.length).trim(),m=rest.match(headPattern);if(!m||m[1]&&m[3])continue;
-  const rawValue=num(m[2]);if(rawValue===null)continue;
-  const unitCandidates=t[4].flatMap(u=>[u,...(aliases[u]||[])].map(raw=>({u,raw:unitSyntax(raw)}))).sort((a,b)=>b.raw.length-a.raw.length);
+  const rest=text.slice(name.length).trim();
+  if(isQualitativeTest(t[0])){
+   const fields=rest.split(/\s+(?:Ref\.?|Referans)\s*:\s*/i);if(fields.length>2)continue;
+   const result=qualitativeValue(fields[0],t[0]);const ref=fields[1]===undefined?'':qualitativeValue(fields[1],t[0]);
+   if(result===null||ref===null)continue;
+   found.push({testId:t[0],name:t[1],value:null,comparator:'',resultText:result,unit:'',rawUnit:'',reportedFlag:'',low:null,high:null,referenceText:ref,raw});continue;
+  }
+  const m=rest.match(headPattern);if(!m||m[1]&&m[3])continue;
+  const result=parseResult(m[2],t[0]);if(!result)continue;
+  const remainder=m[4]||'';
+  const unitCandidates=t[4].filter(u=>u!=='1').flatMap(u=>[u,...(aliases[u]||[])].map(raw=>({u,raw:unitSyntax(raw)}))).sort((a,b)=>b.raw.length-a.raw.length);
+  if(t[4].includes('1'))unitCandidates.push({u:'1',raw:''});
   for(const candidate of unitCandidates){
-   if(!m[4].startsWith(candidate.raw)||m[4].length>candidate.raw.length&&!/\s/.test(m[4].charAt(candidate.raw.length)))continue;
-   const unit=normalizeUnit(candidate.raw,t[4]);if(!unit)continue;
-   let suffix=m[4].slice(candidate.raw.length).trim(),reportedFlag=m[1]||m[3]||'',low=null,high=null;
+   if(candidate.raw&&(!remainder.startsWith(candidate.raw)||remainder.length>candidate.raw.length&&!/\s/.test(remainder.charAt(candidate.raw.length))))continue;
+   const unit=candidate.u==='1'?'1':normalizeUnit(candidate.raw,t[4]);if(!unit)continue;
+   let suffix=remainder.slice(candidate.raw.length).trim(),reportedFlag=m[1]||m[3]||'';
    const flag=suffix.match(trailingFlag);if(flag){if(reportedFlag)continue;reportedFlag=flag[1];suffix=suffix.slice(0,flag.index).trim()}
-   if(suffix){const bounds=suffix.match(/^(-?\d+(?:[.,]\d+)?)\s*[-–−]\s*(-?\d+(?:[.,]\d+)?)$/);if(!bounds)continue;low=num(bounds[1]);high=num(bounds[2]);if(low===null||high===null||low>high)continue;}
-   found.push({testId:t[0],name:t[1],value:rawValue,unit,rawUnit:candidate.raw,reportedFlag,low,high,raw});
+   const reference=parseReference(suffix);if(!reference)continue;
+   found.push({testId:t[0],name:t[1],...result,unit,rawUnit:candidate.raw,reportedFlag,...reference,raw});
   }
  }
- const distinct=new Map(found.map(r=>[JSON.stringify([r.testId,r.value,r.unit,r.low,r.high,r.reportedFlag]),r]));
+ const distinct=new Map(found.map(r=>[JSON.stringify([r.testId,r.value,r.comparator,r.resultText,r.unit,r.low,r.high,r.referenceText,r.reportedFlag]),r]));
  return distinct.size===1?[...distinct.values()][0]:null;
 }
 export function parseRows(rows){const recognized=[],unresolved=[];for(const {text,page} of rows){if(!text.trim())continue;const r=parseLine(text);if(r)recognized.push({...r,page});else unresolved.push({text,page});}return {recognized,unresolved}}
