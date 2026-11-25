@@ -1,6 +1,11 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {status,parseNumber,series,derive,seal,unseal,empty} from '../core.js';
-test('missing reference is not normal',()=>assert.equal(status({value:2,low:null,high:null}),'Referans yok'));
-test('range boundaries',()=>{assert.equal(status({value:2,low:2,high:4}),'Aralık içinde');assert.equal(status({value:5,low:2,high:4}),'Aralık üstünde')});
-test('number validation',()=>{assert.equal(parseNumber('3,5'),3.5);assert.equal(parseNumber(''),null);assert.equal(parseNumber('1.2.3'),null)});
-test('unit separation',()=>assert.equal(series([{name:'x',unit:'a',date:'2026-01-01'},{name:'x',unit:'b',date:'2026-01-01'}],'x','a').length,1));
+import test from 'node:test';import assert from 'node:assert/strict';import {status,parseNumber,series,derive,seal,unseal,empty,normalizeData,validDate,sameMeasurement} from '../core.js';
+test('missing range is unknown',()=>assert.equal(status({value:2,low:null,high:null}),'Referans yok'));
+test('range endpoints',()=>{assert.equal(status({value:2,low:2,high:4}),'Aralık içinde');assert.equal(status({value:5,low:2,high:4}),'Aralık üstünde')});
+test('number strictness',()=>{assert.equal(parseNumber('3,5'),3.5);assert.equal(parseNumber(''),null);assert.equal(parseNumber('1.2.3'),null);assert.equal(parseNumber('<5'),null)});
+test('unit and lab separation',()=>assert.equal(series([{name:'x',unit:'a',lab:'A',date:'2026-01-01'},{name:'x',unit:'b',lab:'A',date:'2026-01-01'},{name:'x',unit:'a',lab:'B',date:'2026-01-01'}],'x','a','A','').length,1));
+test('valid dates',()=>{assert.equal(validDate('2024-02-29'),true);assert.equal(validDate('2025-02-29'),false);assert.equal(validDate('9999-01-01'),false)});
+test('v1 migration retains data',()=>{const d=normalizeData({version:1,labs:[{id:'l',name:'LDL',value:120,unit:'mg/dL',date:'2024-01-01',low:null,high:null}],notes:[]});assert.equal(d.version,2);assert.equal(d.labs[0].profileId,'self');assert.equal(d.labs[0].value,120)});
+test('orphan profile rejected',()=>{const d=empty();d.notes.push({id:'n',profileId:'unknown',date:'2024-01-01',text:'x'});assert.throws(()=>normalizeData(d))});
+test('different profile not duplicate',()=>{const r={profileId:'a',name:'x',unit:'u',date:'2024-01-01',value:1};assert.equal(sameMeasurement(r,{...r,profileId:'b'}),false);assert.equal(sameMeasurement(r,{...r}),true)});
 test('encrypted roundtrip and wrong password',async()=>{const salt=crypto.getRandomValues(new Uint8Array(16)),key=await derive('test password 123',salt),raw=await seal(empty(),key,salt);assert.deepEqual((await unseal(raw,'test password 123')).data,empty());await assert.rejects(unseal(raw,'wrong'))});
+test('large note vault does not overflow base64 conversion',async()=>{const d=empty();for(let i=0;i<100;i++)d.notes.push({id:'n'+i,profileId:'self',date:'2024-01-01',text:'x'.repeat(3000)});const salt=crypto.getRandomValues(new Uint8Array(16)),key=await derive('test password 123',salt);assert.equal((await unseal(await seal(d,key,salt),'test password 123')).data.notes.length,100)});

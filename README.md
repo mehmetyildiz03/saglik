@@ -1,9 +1,15 @@
-# Pera Sağlık
+# Pera Sağlık · v0.2.0
 
-Bağımsız, kişisel sağlık kayıtları uygulaması. Sağlık verileri yalnız şifreli tarayıcı kasasında tutulur. Tanı veya tedavi amacıyla kullanılmamalıdır. Ana BioNexus deposundan kişisel veri ya da özel kaynak kodu kopyalanmaz.
+Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
 ## Geliştirme
-Node.js 22+ ile `npm test`; tarayıcıda yerel HTTP sunucusu ile çalıştırın. PDF motoru kurulum ve yayın doğrulaması ayrıca yapılmalıdır.
+Node.js 22+; npm install, npm test, npm run build. dist/ klasörünü HTTPS veya localhost üzerinden sun. Kök statik Pages yayını manuel kayıt ve metin aktarımını çalıştırır; PDF için dist/ derlemesi gerekir. PDF.js kararlı sürümü 6.5.438 olarak sabitlendi; paket kurulumunun ve gerçek PDF testlerinin başarıyla tamamlanması gerekir.
 
-## Bilimsel ilke
-Rapor referansı, klinik karar eşiği ve tedavi hedefi ayrı tutulur. Eksik ölçüm normal sayılmaz. Kaynaklar: MedlinePlus, ADA 2026, KDIGO 2024. Katalog isim ve birim eşleştirmesi klinik referans onayı anlamına gelmez.
+## Bilimsel ayrım
+Katalogdaki 42 test isim/birim eşleştirmesidir, evrensel sayısal referans değildir. Rapor aralığı, klinik karar eşiği ve tedavi hedefi ayrı bilgi türleridir. MedlinePlus, ADA 2026 ve KDIGO 2024 kaynak kayıtları Bilim ekranındadır. Klinik otomatik tanı veya organ puanı yoktur.
+
+## Veri ve güvenlik
+PBKDF2-HMAC-SHA256 (600.000 iterasyon), rastgele 16 bayt tuz; AES-GCM-256 ve her kayıtta rastgele 12 bayt IV. Tüm profiller tek şifreli kasa içinde; profil başına ayrı erişim güvenliği yoktur. Aynı origin üzerinde çalışan diğer siteler tarayıcı depolamasına erişebilir. Kasa açıkken güvenilir olmayan cihaz, eklenti veya uygulama kodu risk oluşturur. 5 dakika boşta kalınca kilitlenir. Yedek alma ve geri yükleme desteklenir; parola kurtarma yoktur.
+
+## PDF sınırları
+Sadece metin katmanı içeren raporlar, 20 MB/50 sayfa; kesin ad/birim/sayısal satır tanıma. Bilinmeyen satırlar inceleme ekranında kalır; kullanıcı seçimi ve tarih olmadan kayıt yoktur. OCR, karşılaştırma işaretli sonuçlar, çok satırlı karmaşık raporlar ve evrensel birim dönüşümü henüz desteklenmez. Sentetik ayrıştırma kontrolleri gerçek rapor kabul testi değildir.
