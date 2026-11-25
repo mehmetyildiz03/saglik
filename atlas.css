@@ -1,0 +1,81 @@
+/* Desktop workspace 0.12 — visual lab atlas. Mobile keeps its compact layout. */
+.atlas-sidebar-intro,.atlas-sidebar-foot,.atlas-category,.atlas-expand{display:none}
+[data-system=heart]{--system-color:#ac425e;--system-tint:#fce9ef}
+[data-system=blood]{--system-color:#b34f72;--system-tint:#f9e6ee}
+[data-system=metabolism]{--system-color:#a66e14;--system-tint:#fff2d9}
+[data-system=kidney]{--system-color:#416cae;--system-tint:#e7efff}
+[data-system=liver]{--system-color:#a06b31;--system-tint:#faeddf}
+[data-system=thyroid]{--system-color:#7653a5;--system-tint:#eee8f9}
+[data-system=nutrient]{--system-color:#387a51;--system-tint:#e4f2df}
+[data-system=immune]{--system-color:#217d89;--system-tint:#e1f3f4}
+[data-system=urine]{--system-color:#6978b3;--system-tint:#e9edfc}
+[data-system=other],[data-system=all]{--system-color:#53677e;--system-tint:#edf1f6}
+.atlas-system-rail{margin:14px 0 10px}
+.atlas-rail-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 9px}.atlas-rail-heading strong{font-size:13px;color:var(--ink)}.atlas-rail-heading small{font-size:10px;color:var(--muted)}
+.atlas-system-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:7px}
+.atlas-system-tile{display:flex;align-items:center;position:relative;text-align:left;gap:8px;min-width:0;padding:8px;min-height:58px;border:1px solid var(--line);background:var(--surface);border-radius:10px}
+.atlas-system-tile[aria-pressed=true]{border-color:var(--system-color);background:var(--system-tint);box-shadow:inset 0 0 0 1px var(--system-color)}
+.atlas-system-tile .atlas-system-art{width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center;color:var(--system-color);background:var(--system-tint);border-radius:9px}
+.atlas-system-art svg{width:24px;height:24px}
+.atlas-system-text{display:flex;flex-direction:column;gap:4px;min-width:0}.atlas-system-text strong{font-size:11px;line-height:1.2;overflow-wrap:anywhere}.atlas-system-text small{font-size:10px;color:var(--muted);font-weight:500}
+.atlas-out-count{position:absolute;right:5px;top:-7px;background:#fff3e2;border:1px solid #e7c9aa;color:#93521c;border-radius:6px;font-size:9px;padding:2px 4px;font-weight:700}
+.atlas-detail-tools{display:flex;align-items:center;justify-content:space-between;gap:10px}.atlas-detail-identity{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--system-color);font-weight:700;margin:0 0 6px}.atlas-detail-identity svg{width:20px;height:20px}
+@media(min-width:1100px){
+ :root{--canvas:#f2f4f8}
+ main{max-width:1880px;padding:0 24px 30px}.top{padding:13px max(24px,calc((100vw - 1832px)/2));min-height:70px;align-items:center}
+ #workspace{display:grid;grid-template-columns:174px minmax(0,1fr);align-items:start;gap:23px;padding-top:22px}
+ #workspace aside{position:sticky;top:20px;min-height:calc(100vh - 116px);max-height:calc(100vh - 44px);margin:0;padding:19px 10px;background:#1d3049;border:0;border-radius:19px;color:#f3f7fd;display:flex;flex-direction:column;gap:18px;box-shadow:0 8px 24px #152e4711}
+ .atlas-sidebar-intro{display:flex;flex-direction:column;gap:5px;padding:0 8px 12px;border-bottom:1px solid #ffffff18}.atlas-sidebar-label{font-size:9px;font-weight:750;letter-spacing:.11em;color:#a7bcd1}.atlas-sidebar-intro strong{font-size:15px;letter-spacing:-.02em}.atlas-sidebar-intro small{font-size:10px;color:#b4c8db}
+ #workspace nav{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:0}#workspace nav button{width:100%;border-radius:10px;min-height:46px;color:#c2d1e2;padding:11px 9px;font-weight:600;gap:10px}#workspace nav button svg{width:20px;height:20px;flex-basis:20px}#workspace nav button span{font-size:13px}
+ #workspace nav button[aria-current=page]{background:#d5f1eb;border-color:transparent;color:#164e53;box-shadow:0 3px 12px #0000000d}
+ #workspace nav button:not([aria-current=page]):hover{background:#304863;color:#fff}
+ .atlas-sidebar-foot{display:flex;align-items:center;gap:6px;margin-top:auto;font-size:10px;color:#a9bfd3;padding:10px 7px}.atlas-privacy-dot{width:7px;height:7px;border-radius:50%;background:#8ed6bb;flex:0 0 7px}
+ .lab-titlebar{margin-bottom:20px}.lab-titlebar h1{font-size:38px;letter-spacing:-.055em}.lab-title-meta{font-size:13px}.lab-heading-actions .lab-add{min-width:116px}
+ .lab-browser{border-radius:20px;padding:0 18px 14px;box-shadow:0 6px 24px #20344905}.lab-segments{margin-left:-18px;margin-right:-18px;padding:0 18px}
+ .lab-toolbar{grid-template-columns:minmax(0,1fr) auto}.lab-search-field input{background:var(--surface-2);border-color:var(--line)}
+ .atlas-system-tiles{grid-template-columns:repeat(auto-fit,minmax(134px,1fr))}
+ .lab-result-tools{margin:8px 0 12px}.lab-result-list.atlas-mode{display:grid;grid-template-columns:repeat(auto-fill,minmax(204px,1fr));align-items:stretch;gap:12px;padding:2px 0}
+ .atlas-mode .lab-column-head{display:none}.atlas-mode .lab-day-heading{grid-column:1/-1;margin:0;padding:6px 0;background:none}
+ .atlas-mode .lab-result-row{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto auto auto 1fr;gap:9px 6px;align-items:start;padding:14px;min-height:199px;border:1px solid var(--line);border-top:3px solid var(--system-color);border-radius:14px;background:var(--surface);box-shadow:0 3px 10px #253d5410;overflow:hidden}
+ .atlas-mode .lab-result-row:hover{border-color:var(--system-color);background:var(--surface-2);box-shadow:0 4px 16px #263b4e12}.atlas-mode .lab-result-row[aria-current=true]{border-color:var(--green);box-shadow:0 0 0 2px var(--green)}
+ .atlas-mode .atlas-category{display:flex;align-items:center;gap:6px;grid-column:1;grid-row:1;min-width:0;color:var(--system-color);font-weight:700;font-size:10px;line-height:1.2;overflow-wrap:anywhere}
+ .atlas-mode .atlas-category svg{width:27px;height:27px;flex:0 0 27px;background:var(--system-tint);padding:4px;border-radius:8px}
+ .atlas-mode .lab-row-name{grid-row:2;grid-column:1/-1;gap:3px}.atlas-mode .lab-row-name strong{font-size:15px;line-height:1.3;font-weight:730}.atlas-mode .lab-row-name small{font-size:10px}.atlas-mode .lab-row-name .lab-previous{display:none}
+ .atlas-mode .lab-row-value{grid-row:3;grid-column:1/-1;text-align:left;align-items:start;gap:3px}.atlas-mode .lab-result-number{font-size:32px;font-weight:780;line-height:1.05;letter-spacing:-.05em}.atlas-mode .lab-result-unit{font-size:.45em;font-weight:600;letter-spacing:0}.atlas-mode .lab-row-value small{font-size:11px}
+ .atlas-mode .lab-row-status{grid-row:4;grid-column:1/-1;display:flex;flex-direction:column;align-items:flex-start;gap:5px}.atlas-mode .status.lab-inline-status{font-size:11px;color:var(--muted)}.atlas-mode .status.lab-inline-status.in{color:var(--normal)}.atlas-mode .status.lab-inline-status.out{color:var(--warning)}
+ .atlas-mode .ref-mini{width:100%;max-width:220px}.atlas-mode .lab-row-previous{grid-column:1/-1;grid-row:5;display:flex;flex-wrap:wrap;flex-direction:row;align-items:center;align-self:end;gap:3px 6px;border-top:1px solid var(--line);padding-top:7px;min-width:0}
+ .atlas-mode .lab-row-previous strong{font-size:11px;font-weight:650}.atlas-mode .lab-row-previous small{font-size:10px}.atlas-mode .lab-row-previous .lab-sparkline{width:100%;max-width:150px;height:23px;margin:0}.atlas-mode .lab-row-previous>span:only-child{display:none}.atlas-mode .lab-row-previous:not(:has(strong,svg)){border:0;padding:0}
+ .atlas-mode .lab-chevron{grid-column:2;grid-row:1;align-self:start}
+ .lab-split{grid-template-columns:minmax(0,1fr) minmax(320px,38%);gap:14px}
+ .lab-split .lab-detail-pane{top:18px;max-height:calc(100vh - 40px);border-radius:18px;padding:17px}
+ .lab-split .atlas-system-tiles{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+ .lab-split .lab-result-list.atlas-mode{grid-template-columns:repeat(auto-fill,minmax(174px,1fr));gap:8px}
+ .lab-split .atlas-mode .lab-result-row{min-height:185px;padding:11px}
+ .lab-split .atlas-mode .lab-result-number{font-size:27px}
+ .lab-split .atlas-mode .lab-row-name strong{font-size:13px}
+ .lab-split .lab-titlebar h1{font-size:29px}.lab-split .lab-heading-actions button{min-height:40px;font-size:12px;padding:7px 8px}.lab-split .lab-add{min-width:68px}
+ .atlas-expand{display:block;min-height:34px;font-size:11px;color:var(--green);padding:7px 9px;background:var(--surface-2)}
+ .lab-detail-pane .atlas-detail-tools .lab-back{margin:0}.lab-detail-pane .atlas-detail-tools{margin-bottom:12px}
+ .lab-split.focus-expanded{display:block}.lab-split.focus-expanded .lab-list-pane{display:none}
+ .lab-split.focus-expanded .lab-detail-pane{position:static;max-height:none;overflow:visible;display:grid;grid-template-columns:minmax(270px,.85fr) minmax(0,1.4fr);gap:16px;align-items:start;padding:22px}
+ .focus-expanded .lab-detail-pane>.atlas-detail-tools,.focus-expanded .lab-detail-pane>.lab-titlebar,.focus-expanded .lab-detail-pane>.lab-notice{grid-column:1/-1;margin:0}
+ .focus-expanded .lab-detail-pane .lab-titlebar h1{font-size:34px}.focus-expanded .lab-detail-pane .panel{margin:0;padding:18px}
+ .focus-expanded .lab-detail-pane .lab-focus{grid-column:1;grid-row:auto;min-height:250px}.focus-expanded .lab-detail-pane .lab-trend-panel{grid-column:2;grid-row:3 / span 2}
+ .focus-expanded .lab-detail-pane .lab-history{grid-column:1}.focus-expanded .lab-detail-pane .lab-original,.focus-expanded .lab-detail-pane .lab-graph-note{grid-column:1/-1}
+ .focus-expanded .lab-detail-pane .lab-focus-number{font-size:46px}.focus-expanded .lab-detail-pane .lab-trend-svg{max-height:360px}
+}
+@media(min-width:1100px) and (max-width:1350px){#workspace{grid-template-columns:150px minmax(0,1fr);gap:16px}#workspace aside{padding:16px 7px}.atlas-sidebar-intro{padding:0 5px 9px}main{padding-left:17px;padding-right:17px}.lab-split{grid-template-columns:minmax(0,1fr) minmax(310px,39%);gap:10px}.lab-split .lab-browser{padding-left:12px;padding-right:12px}.lab-split .lab-segments{margin-left:-12px;margin-right:-12px;padding-left:12px;padding-right:12px;gap:13px}.lab-split .atlas-system-tiles{grid-template-columns:repeat(auto-fit,minmax(105px,1fr))}.lab-split .lab-titlebar{flex-wrap:wrap}.lab-split .lab-result-row:not(.atlas-mode .lab-result-row){grid-template-columns:minmax(0,1fr) minmax(0,1fr) 12px;gap:4px 8px}.lab-split .lab-column-head{display:none}.lab-split .lab-result-row:not(.atlas-mode .lab-result-row) .lab-row-name{grid-column:1;grid-row:1/3}.lab-split .lab-result-row:not(.atlas-mode .lab-result-row) .lab-row-value{grid-column:2;grid-row:1;text-align:right;align-items:flex-end}.lab-split .lab-result-row:not(.atlas-mode .lab-result-row) .lab-row-status{grid-column:2;grid-row:2;align-items:flex-end;flex-direction:row;justify-content:flex-end}.lab-split .lab-result-row:not(.atlas-mode .lab-result-row) .lab-chevron{grid-column:3;grid-row:1/3}}
+@media(max-width:1099px){.atlas-system-rail,.layout-choice[data-layout=atlas]{display:none!important}}
+[data-theme=dark] [data-system]{--icon-contrast:#17283e}
+[data-theme=dark] [data-system=heart],[data-theme=dark] [data-system=blood]{--system-color:#f3a2ba;--system-tint:#482e47}
+[data-theme=dark] [data-system=metabolism],[data-theme=dark] [data-system=liver]{--system-color:#edc28b;--system-tint:#46392f}
+[data-theme=dark] [data-system=kidney],[data-theme=dark] [data-system=urine]{--system-color:#afc9ff;--system-tint:#2c3d59}
+[data-theme=dark] [data-system=thyroid]{--system-color:#c4b1f2;--system-tint:#41374f}
+[data-theme=dark] [data-system=nutrient]{--system-color:#a3dcae;--system-tint:#2b4339}
+[data-theme=dark] [data-system=immune]{--system-color:#97dee4;--system-tint:#27454d}
+[data-theme=dark] [data-system=all],[data-theme=dark] [data-system=other]{--system-color:#b5c7dc;--system-tint:#2c4059}
+[data-theme=dark] .atlas-system-tile[aria-pressed=true]{background:var(--system-tint);border-color:var(--system-color)}
+[data-theme=dark] .atlas-out-count{background:#49372b;color:#ffc58f;border-color:#a3764a}
+[data-theme=dark] .atlas-mode .lab-result-row{background:var(--surface);border-color:var(--line);border-top-color:var(--system-color)}
+[data-theme=dark] .atlas-mode .lab-result-row:hover{background:var(--surface-2)}
+@media(min-width:1100px){[data-theme=dark] #workspace aside{background:#14243b}[data-theme=dark] #workspace nav button[aria-current=page]{background:#67d1c2;color:#142b32}}

@@ -1,7 +1,7 @@
 import {exact,safeReference,resultLabel} from './measurement.js';
 export const UI_KEY='pera-appearance-v1';
 export function appearance(input){
- return {theme:input?.theme==='dark'?'dark':'light',layout:input?.layout==='cards'?'cards':'list'};
+ return {theme:input?.theme==='dark'?'dark':'light',layout:['list','cards','atlas','auto'].includes(input?.layout)?input.layout:'auto'};
 }
 export function readAppearance(storage){try{return appearance(JSON.parse(storage.getItem(UI_KEY)||'{}'))}catch{return appearance(null)}}
 export function saveAppearance(storage,next){const safe=appearance(next);try{storage.setItem(UI_KEY,JSON.stringify(safe))}catch{}return safe}
@@ -30,3 +30,5 @@ export function rangeDisplay(r,{mini=false}={}){
  if(!mini){const labels=H('div',undefined,'reference-labels');labels.append(H('span','Altında'),H('span',String(m.low)+' – '+String(m.high)),H('span','Üstünde'));root.append(labels,H('p','Rapor aralığı; dıştaki konum yalnız yönü belirtir, sapmanın büyüklüğünü göstermez.','ref-explainer'))}
  return root
 }
+
+export function effectiveLayout(pref,desktop){return pref.layout==='auto'?(desktop?'atlas':'list'):pref.layout==='atlas'&&!desktop?'list':pref.layout}
