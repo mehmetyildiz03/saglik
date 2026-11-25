@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.5.0
+# Pera Sağlık · v0.5.1
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -28,3 +28,6 @@ GitHub Pages için Settings > Pages > Source: GitHub Actions seçilmeli. `npm ru
 
 ## v0.5 — Ölçüm türleri ve idrar
 78 test tanımı ve 13 bilimsel bağlam kaydı. Sayısal, sınır bildiren (<, <=, >, >=) ve nitel sonuçlar ayrı biçimde saklanır; sınır/nitel sonuçlar grafik ve türetilmiş hesaplamalara alınmaz. HL7 FHIR R5 Quantity comparator semantiğinden esinlenilmiştir; FHIR uyumluluğu iddiası yoktur. Tek taraflı referans metin olarak korunur, otomatik sınıflandırılmaz. İdrar strip, mikroskopi ve kantitatif analizler ayrı tanımlardır. Aynı tarihli birden çok ölçüm varsa son değer seçilmez. Sistem keşfi ölçüm kartları ve karşılaştırma alanı içerir. Gerçek rapor doğrulaması ve klinik popülasyon referans onayı devam eden işlerdir.
+
+## v0.5.1 — Veri kalitesi
+Mikroskopik /HPF biriminin önündeki ayraç korunur. Bilinmeyen mikroskopi alan birimleri eşleştirilmez. Grafik çizgileri aynı gün birden fazla ölçüm veya sınır bildiren ara ölçüm olduğunda kesilir. Eşdeğer görünen kayıtlar kullanıcı seçimine göre korunabilir veya atlanabilir.

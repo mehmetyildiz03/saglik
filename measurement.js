@@ -37,3 +37,9 @@ export function changeSummary(group){
  const delta=group.latest[0].value-previous[0].value;
  return {delta:Number(delta.toPrecision(12)),previous:previous[0],current:group.latest[0]};
 }
+
+export function trendConnections(rows){
+ const days=new Map();for(const r of rows){const a=days.get(r.date)||[];a.push(r);days.set(r.date,a)}
+ const sorted=[...days.keys()].sort(),out=[];for(let i=1;i<sorted.length;i++){const a=days.get(sorted[i-1]),b=days.get(sorted[i]);if(a.length===1&&b.length===1&&exact(a[0])&&exact(b[0]))out.push([a[0],b[0]])}
+ return out;
+}

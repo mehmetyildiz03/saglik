@@ -9,7 +9,7 @@ const aliases={
  '10^6/µL':['10⁶/µL','10⁶/uL','10⁶/μL','10^6/uL','10^6/μL','x10^6/µL','x10^6/uL','x10^6/μL','×10⁶/µL','10*6/uL'],
  '10^9/L':['10⁹/L','x10^9/L','×10⁹/L','10*9/L'],
  '10^12/L':['10¹²/L','x10^12/L','×10¹²/L','10*12/L'],
- '/HPF':['/hpf','/BBA'], 'hücre/µL':['hücre/uL','hücre/μL'],
+ '/HPF':['/hpf'], 'hücre/µL':['hücre/uL','hücre/μL'],
  'K/µL':['K/uL','K/μL'], 'M/µL':['M/uL','M/μL'],
  'mL/min/1.73 m²':['mL/min/1.73m²','mL/min/1.73 m2','mL/dk/1.73 m²','mL/dk/1.73 m2','mL/dk/1.73m2']
 };
@@ -32,9 +32,9 @@ function parseReference(suffix){
 }
 export function parseLine(line){
  const raw=String(line).trim();if(!raw||raw.length>500)return null;
- const text=unitSyntax(raw);const found=[];
+ const text=raw.replace(/\s+/g,' ');const found=[];
  for(const {t,a} of names){
-  const name=unitSyntax(a);if(norm(text.slice(0,name.length))!==norm(name)||!/\s/.test(text.charAt(name.length)))continue;
+  const name=a.trim().replace(/\s+/g,' ');if(norm(text.slice(0,name.length))!==norm(name)||!/\s/.test(text.charAt(name.length)))continue;
   const rest=text.slice(name.length).trim();
   if(isQualitativeTest(t[0])){
    const fields=rest.split(/\s+(?:Ref\.?|Referans)\s*:\s*/i);if(fields.length>2)continue;
@@ -44,7 +44,7 @@ export function parseLine(line){
   }
   const m=rest.match(headPattern);if(!m||m[1]&&m[3])continue;
   const result=parseResult(m[2],t[0]);if(!result)continue;
-  const remainder=m[4]||'';
+  const remainder=unitSyntax(m[4]||'');
   const unitCandidates=t[4].filter(u=>u!=='1').flatMap(u=>[u,...(aliases[u]||[])].map(raw=>({u,raw:unitSyntax(raw)}))).sort((a,b)=>b.raw.length-a.raw.length);
   if(t[4].includes('1'))unitCandidates.push({u:'1',raw:''});
   for(const candidate of unitCandidates){
