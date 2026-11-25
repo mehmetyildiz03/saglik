@@ -58,6 +58,7 @@ function chartSVG(model,small,selected,onPick){
 export function sparkline(rows){const model=trendModel(rows,{width:100,height:27,axes:false,limit:12,band:false});return model?chartSVG(model,true,null,null):null}
 function textValue(value,unit){return value===null?'—':String(round(value))+(unit&&unit!=='1'?' '+unit:'')}
 function signed(value){return (value>0?'+':'')+String(value)}
+export function displayPercent(value){if(!Number.isFinite(value))return '—';if(value===0)return '0%';const magnitude=Math.abs(value);if(magnitude<.01)return (value>0?'Artış':'Azalış')+' < %0,01';const digits=magnitude>=1e6?magnitude.toExponential(2).replace('.',','):new Intl.NumberFormat('tr-TR',{maximumFractionDigits:2}).format(magnitude);return (value>0?'+':'−')+digits+'%'}
 function statCell(name,value){const d=H('div',undefined,'analysis-stat');d.append(H('small',name),H('strong',value));return d}
 export function trendPanel(rows,initialDate,today,onOpen,{wide=false}={}){
  const p=H('section',undefined,'panel lab-detail-chart lab-trend-panel'),header=H('div',undefined,'trend-heading');header.append(H('h2','Zaman içindeki değişim'),H('p','Ölçüm grubu · '+(rows[0]?.unit==='1'?'Boyutsuz':rows[0]?.unit||''),'muted'));p.append(header);
@@ -84,7 +85,7 @@ export function trendPanel(rows,initialDate,today,onOpen,{wide=false}={}){
   }else graphic.append(H('p','Bu dönemde grafik için iki farklı kesin ölçüm tarihi yok. Kayıtlar tabloda korunur.','muted trend-empty'));
   if(chosen){const selected=full.filter(r=>r.date===chosen),info=H('div');info.append(H('small',dateLabel(chosen)+(chosen===dates[0]?' · Son tarih':'')),H('strong',selected.length===1?resultLabel(selected[0]):selected.length+' ayrı kayıt'));readout.append(info);
    const b=H('button','Ölçümü aç','quiet trend-open');b.type='button';b.onclick=()=>onOpen(chosen,selected.length===1?selected[0].id:null);readout.append(b);
-   if(stats?.change){const c=stats.change,absolute=H('div',undefined,'analysis-change-value');absolute.append(H('small','Önceki tarihe göre fark'),H('strong',signed(c.delta)+(unit&&unit!=='1'?' '+unit:'')));const pct=H('div',undefined,'analysis-change-value');pct.append(H('small','Yüzde fark'),H('strong',c.percent===null?'—':signed(c.percent)+'%'));changeBox.append(absolute,pct,H('p','Önceki: '+dateLabel(c.previous.date)+' · '+resultLabel(c.previous)+'. Sayısal fark, klinik iyileşme/kötüleşme anlamına gelmez.','muted'))}else changeBox.append(H('p','Önceki ölçümle fark için iki ardışık tarihte tek kesin sonuç gerekli.','muted'))
+   if(stats?.change){const c=stats.change,absolute=H('div',undefined,'analysis-change-value');absolute.append(H('small','Önceki tarihe göre fark'),H('strong',signed(c.delta)+(unit&&unit!=='1'?' '+unit:'')));const pct=H('div',undefined,'analysis-change-value');pct.append(H('small','Yüzde fark'),H('strong',displayPercent(c.percent)));changeBox.append(absolute,pct,H('p','Önceki: '+dateLabel(c.previous.date)+' · '+resultLabel(c.previous)+'. Sayısal fark, klinik iyileşme/kötüleşme anlamına gelmez.','muted'))}else changeBox.append(H('p','Önceki ölçümle fark için iki ardışık tarihte tek kesin sonuç gerekli.','muted'))
   }
   drawTable(full)
  }

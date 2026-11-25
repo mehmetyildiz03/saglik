@@ -17,3 +17,11 @@
 .analysis-table th,.analysis-table td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:middle;overflow-wrap:anywhere}.analysis-table th{background:var(--surface-3);font-weight:700;color:var(--muted)}.analysis-table tr[data-selected=true]{background:var(--mint)}.analysis-table button{font-size:10px;min-height:32px;padding:5px 7px;white-space:nowrap}.analysis-table-wrap>button{margin-top:8px;font-size:11px;min-height:36px}
 @media(min-width:1100px){.focus-expanded .analysis-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.focus-expanded .analysis-stat{padding:12px}.focus-expanded .analysis-stat strong{font-size:20px}.focus-expanded .lab-trend-panel .lab-trend-svg{max-height:none}.focus-expanded .analysis-table{font-size:12px}.focus-expanded .analysis-table th,.focus-expanded .analysis-table td{padding:10px 8px}.focus-expanded .analysis-chart-tools{margin-top:12px}.focus-expanded .analysis-scope{font-size:12px}}
 @media(max-width:740px){.analysis-stat strong{font-size:16px}.analysis-table th,.analysis-table td{padding:7px 4px}.analysis-table button{white-space:normal;min-height:36px}.analysis-legend{font-size:10px}.analysis-change-value strong{font-size:16px}}
+
+/* Theme transitions must not leave light backgrounds behind dark text colors. */
+.theme-toggle,.atlas-system-tile,.lab-detail-pane button{transition:none}
+[data-theme=dark] .lab-detail-pane .lab-history-day{background:var(--surface);color:var(--ink)}
+[data-theme=dark] .lab-detail-pane .lab-history-day[aria-pressed=true]{background:var(--mint);color:var(--green)}
+[data-theme=dark] .lab-detail-pane .lab-history-day:hover{background:var(--surface-3);color:var(--ink)}
+[data-theme=dark] .lab-detail-pane .danger{background:var(--rose);color:#ffb3b8;border-color:#9a6476}
+[data-theme=dark] .lab-detail-pane .lab-pin[aria-pressed=true]{background:#493f28;color:#ffe1a1;border-color:#a5864b}

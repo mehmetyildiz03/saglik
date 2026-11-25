@@ -30,3 +30,6 @@ Tarih dolduğu için bir faz başarılı sayılmaz. Gecikme halinde PROGRESS.md 
 Her planlı çalışmada önce main ve aday dalı, GitHub Actions, docs/PROGRESS.md ve açık engeller okunur. En yüksek öncelikli tamamlanmamış işi seç; gerekiyorsa kaynakları yeniden araştır ve RESEARCH.md'ye URL, tarih, kullanım sınırı ekle. Bir küçük ama uçtan uca kullanılabilir dilim uygula, test et ve kanıt kaydet. Başarısız aday yayınlanmaz. Yalnız bu repo içinde çalışma yetkisi vardır. Yeni yetki, ücretli hizmet, kişisel veri yükleme, tıbbi iddia veya riskli veri migrasyonu gerektiren işte dur ve açıkça bildir. Onaylanan sürümden sonra kullanıcıya basit değişiklik özeti ve bağlantılar ver. Çakışma varsa güncel main'i yeniden oku, force push kullanma. Başarı iddiası için gerçek koşu sonucunu bekle; bekleyen test veya yayın açıkça bekleyen olarak kalır.
 
 İlgili belgeler: [Kabul kriterleri](ACCEPTANCE.md), [Araştırma kaydı](RESEARCH.md), [İlerleme günlüğü](PROGRESS.md).
+
+## Planlı çalışma düzeni
+27 Kasım 2026'dan itibaren her gün yaklaşık 09:00 (Europe/Istanbul) bir geliştirme çalışması planlandı. İlk çalışma bu plan kaydedildiğinde başladı. Otomasyonun erişim ve çalışma sınırları olabilir; bekleyen CI veya yetki engeli sonraki çalışma için kaydedilir. Her çalışma önce önceki adayın durumunu çözer; sonra sıradaki küçük iş dilimine geçer.
