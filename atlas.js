@@ -4,7 +4,7 @@ export const systemNames=Object.fromEntries(systems.map(s=>[s[0],s[1]]));
 export function systemSummary(items){
  const counts=new Map();
  for(const item of items){if(!item.records?.length)continue;const id=rowCategory(item.records[0]),s=counts.get(id)||{id,name:systemNames[id]||'Diğer',count:0,out:0,review:0};s.count++;if(item.state==='out')s.out++;if(item.state==='review')s.review++;counts.set(id,s)}
- return [...systems.map(s=>s[0]),'other'].map(id=>counts.get(id)).filter(Boolean)
+ return [...new Set([...systems.map(s=>s[0]),'other'])].map(id=>counts.get(id)).filter(Boolean)
 }
 const ns='http://www.w3.org/2000/svg';
 function S(tag,attrs){const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));return n}
