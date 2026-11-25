@@ -541,6 +541,46 @@ export const catalogue=[
       "mm/saat",
       "mm/h"
     ]
+  ],
+  [
+    "apob",
+    "Apolipoprotein B",
+    "heart",
+    [
+      "ApoB",
+      "Apolipoprotein B"
+    ],
+    [
+      "mg/dL",
+      "g/L"
+    ]
+  ],
+  [
+    "lpa",
+    "Lipoprotein(a)",
+    "heart",
+    [
+      "Lp(a)",
+      "Lipoprotein(a)"
+    ],
+    [
+      "mg/dL",
+      "nmol/L"
+    ]
+  ],
+  [
+    "nonhdl",
+    "Non-HDL kolesterol",
+    "heart",
+    [
+      "Non-HDL",
+      "Non-HDL kolesterol",
+      "non-HDL-C"
+    ],
+    [
+      "mg/dL",
+      "mmol/L"
+    ]
   ]
 ];
 export const systems=[
@@ -635,6 +675,15 @@ export const sources=[
     "url": "https://doi.org/10.1016/j.kint.2023.10.016",
     "text": "eGFR ile idrar albümin ölçümü birlikte değerlendirilir. Kroniklik en az üç aylık bir süreyi gerektirir; tek anormal sonuçtan kroniklik varsayılmaz.",
     "scope": "Klinik değerlendirme; otomatik evre veya hastalık etiketi uygulanmaz."
+  },
+  {
+    "title": "Kan yağları ve kalp-damar riski",
+    "type": "Klinik kılavuz",
+    "organization": "ACC/AHA",
+    "year": "2026",
+    "url": "https://doi.org/10.1161/CIR.0000000000001423",
+    "text": "LDL-C, non-HDL-C, trigliserid, Lp(a) ve bazı durumlarda ApoB kardiyovasküler risk değerlendirmesinde farklı roller taşır. Tedavi hedefleri klinik risk grubuna bağlıdır; tek bir laboratuvar aralığıyla belirlenmez.",
+    "scope": "Kişisel risk hesabı, Lp(a) birim dönüşümü veya tedavi önerisi yapılmaz."
   }
 ];
 export function norm(s){return String(s).trim().toLocaleLowerCase('tr').normalize('NFD').replace(/\p{M}/gu,'').replace(/ı/g,'i').replace(/\s+/g,' ')}
