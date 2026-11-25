@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.3.0
+# Pera Sağlık · v0.4.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -16,3 +16,9 @@ Sadece metin katmanı içeren raporlar, 20 MB/50 sayfa; kesin ad/birim/sayısal 
 
 ## Yayın ve kabul testi
 GitHub Pages için Settings > Pages > Source: GitHub Actions seçilmeli. `npm run test:browser` derlenmiş dist/ üzerinde Chromium ile sentetik PDF, kayıt, profil ayrımı, kasa kilidi ve mobil taşma kontrolünü yapar. Gerçek hasta PDF'leri veya kişisel veriler kamuya açık depoya eklenmez. Node ve tarayıcı kontrolleri klinik doğrulama yerine geçmez.
+
+## v0.4 — Kişisel kayıt ve bilim
+- Şifreli kasa şeması v3; v1/v2 kayıtları migrasyonla korunur. İlaç ve takviye kaydı, ortak tarih çizelgesi ve profil bazlı bilimsel bağlam görünümü.
+- Rapor aralığı değiştirilmez; bilimsel bilgi ayrı katmandır. 10 kaynak kaydı (NIH, Ozarda 2017, ADA 2026, KDIGO 2024, ACC/AHA 2026, WHO, NICE, Endocrine Society). Her kayıt kapsam, kaynak bağlantısı ve bölüm taşır. Klinik üretim onayı değildir.
+- Non-HDL hesaplama aynı örnek için kullanıcı doğrulaması, aynı profil, tarih, laboratuvar ve birim gerektirir. Hesap raporun orijinal ölçümü olarak kaydedilmez.
+- İlaç modülü yalnız kullanıcının bildirdiği kullanım geçmişini saklar. Etkileşim, doz önerisi veya nedensellik çıkarımı yapmaz.

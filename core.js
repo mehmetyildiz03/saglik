@@ -1,3 +1,4 @@
+import {validMedication} from './health.js';
 export const KEY='pera-v1';
 const enc=new TextEncoder(),dec=new TextDecoder(),MAX=8*1024*1024;
 const b64=b=>{const a=new Uint8Array(b);let s='';for(let i=0;i<a.length;i+=16384)s+=String.fromCharCode(...a.subarray(i,i+16384));return btoa(s)};
@@ -6,15 +7,17 @@ const short=(s,max=160)=>typeof s==='string'&&s.trim().length>0&&s.length<=max;
 const optional=(s,max=160)=>s===undefined||s===''||short(s,max);
 export const today=()=>new Date().toLocaleDateString('sv-SE');
 export function validDate(s){if(typeof s!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;const d=new Date(s+'T00:00:00Z');return Number.isFinite(+d)&&d.toISOString().slice(0,10)===s&&s>='1900-01-01'&&s<=today()}
-export function empty(){return {version:2,profiles:[{id:'self',name:'Ben'}],labs:[],notes:[]}}
+export function empty(){return {version:3,profiles:[{id:'self',name:'Ben',referenceMode:'report'}],labs:[],notes:[],meds:[]}}
 export function normalizeData(input){
  if(!input||!Array.isArray(input.labs)||!Array.isArray(input.notes))throw Error('Kasa biçimi geçersiz.');
  let d=input;if(d.version===1)d={...empty(),labs:d.labs.map(r=>({...r,profileId:'self',origin:'manual'})),notes:d.notes.map(r=>({...r,profileId:'self'}))};
- if(d.version!==2||!Array.isArray(d.profiles)||d.profiles.length<1||d.profiles.length>20||d.labs.length>10000||d.notes.length>3000)throw Error('Kasa sınırları aşıldı veya sürümü desteklenmiyor.');
- const ids=new Set();for(const p of d.profiles){if(!p||!short(p.id,100)||!short(p.name,80)||ids.has(p.id))throw Error('Profil verisi geçersiz.');ids.add(p.id)}
- const records=new Set();for(const r of [...d.labs,...d.notes]){if(!r||!short(r.id,100)||records.has(r.id)||!ids.has(r.profileId)||!validDate(r.date))throw Error('Kayıt kimliği veya tarihi geçersiz.');records.add(r.id)}
+ if(d.version===2)d={...d,version:3,profiles:d.profiles?.map(p=>({...p,referenceMode:'report'})),meds:[]};
+ if(d.version!==3||!Array.isArray(d.meds)||d.meds.length>3000||!Array.isArray(d.profiles)||d.profiles.length<1||d.profiles.length>20||d.labs.length>10000||d.notes.length>3000)throw Error('Kasa sınırları aşıldı veya sürümü desteklenmiyor.');
+ const ids=new Set();for(const p of d.profiles){if(!p||!short(p.id,100)||!short(p.name,80)||ids.has(p.id)||!['report','context'].includes(p.referenceMode))throw Error('Profil verisi geçersiz.');ids.add(p.id)}
+ const records=new Set();for(const r of [...d.labs,...d.notes,...d.meds]){if(!r||!short(r.id,100)||records.has(r.id)||!ids.has(r.profileId)||!validDate(r.date))throw Error('Kayıt kimliği veya tarihi geçersiz.');records.add(r.id)}
  for(const r of d.labs){if(!short(r.name)||!short(r.unit,80)||!Number.isFinite(r.value)||!optional(r.testId,80)||!optional(r.lab)||!optional(r.method)||!['manual','pdf','text'].includes(r.origin??'manual')||!(r.low===null&&r.high===null||Number.isFinite(r.low)&&Number.isFinite(r.high)&&r.low<=r.high)||!(r.page===undefined||r.page===null||Number.isInteger(r.page)&&r.page>=1&&r.page<=50))throw Error('Tahlil verisi geçersiz.')}
  for(const r of d.notes){if(!short(r.text,4000))throw Error('Günlük verisi geçersiz.')}
+ for(const r of d.meds){if(!validMedication(r,validDate,short))throw Error('İlaç kaydı geçersiz.')}
  return d;
 }
 export async function derive(password,salt){if(typeof password!=='string'||password.length>1024||salt.length!==16)throw Error('Kasa anahtarı geçersiz.');const k=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:600000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
