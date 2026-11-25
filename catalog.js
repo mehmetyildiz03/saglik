@@ -245,8 +245,7 @@ export const catalogue=[
     "metabolism",
     [
       "Açlık plazma glukozu",
-      "Açlık glukoz",
-      "AKŞ"
+      "Fasting plasma glucose"
     ],
     [
       "mg/dL",
@@ -580,6 +579,245 @@ export const catalogue=[
     [
       "mg/dL",
       "mmol/L"
+    ]
+  ],
+  [
+    "fasting-glucose",
+    "Açlık glukozu (örnek türü belirsiz)",
+    "metabolism",
+    [
+      "Açlık glukoz",
+      "Açlık glukozu",
+      "Glukoz (Açlık)",
+      "AKŞ",
+      "Açlık kan şekeri"
+    ],
+    [
+      "mg/dL",
+      "mmol/L"
+    ]
+  ],
+  [
+    "mono",
+    "Monosit (mutlak)",
+    "blood",
+    [
+      "MONO#",
+      "MON#",
+      "Monosit #"
+    ],
+    [
+      "10^3/µL",
+      "10^9/L",
+      "K/µL"
+    ]
+  ],
+  [
+    "monopct",
+    "Monosit %",
+    "blood",
+    [
+      "MONO%",
+      "MON%",
+      "Monosit %"
+    ],
+    [
+      "%"
+    ]
+  ],
+  [
+    "eos",
+    "Eozinofil (mutlak)",
+    "blood",
+    [
+      "EOS#",
+      "EO#",
+      "Eozinofil #"
+    ],
+    [
+      "10^3/µL",
+      "10^9/L",
+      "K/µL"
+    ]
+  ],
+  [
+    "eospct",
+    "Eozinofil %",
+    "blood",
+    [
+      "EOS%",
+      "EO%",
+      "Eozinofil %"
+    ],
+    [
+      "%"
+    ]
+  ],
+  [
+    "baso",
+    "Bazofil (mutlak)",
+    "blood",
+    [
+      "BASO#",
+      "BAS#",
+      "Bazofil #"
+    ],
+    [
+      "10^3/µL",
+      "10^9/L",
+      "K/µL"
+    ]
+  ],
+  [
+    "basopct",
+    "Bazofil %",
+    "blood",
+    [
+      "BASO%",
+      "BAS%",
+      "Bazofil %"
+    ],
+    [
+      "%"
+    ]
+  ],
+  [
+    "rdwsd",
+    "RDW-SD",
+    "blood",
+    [
+      "RDW-SD"
+    ],
+    [
+      "fL"
+    ]
+  ],
+  [
+    "mpv",
+    "Ortalama trombosit hacmi",
+    "blood",
+    [
+      "MPV"
+    ],
+    [
+      "fL"
+    ]
+  ],
+  [
+    "pdw",
+    "Trombosit dağılım genişliği",
+    "blood",
+    [
+      "PDW"
+    ],
+    [
+      "fL",
+      "%"
+    ]
+  ],
+  [
+    "direct-bili",
+    "Direkt bilirubin",
+    "liver",
+    [
+      "Direkt bilirubin",
+      "Bilirubin direkt"
+    ],
+    [
+      "mg/dL",
+      "µmol/L"
+    ]
+  ],
+  [
+    "serum-urea",
+    "Üre (serum)",
+    "kidney",
+    [
+      "Üre (serum)",
+      "Serum üre"
+    ],
+    [
+      "mg/dL",
+      "mmol/L"
+    ]
+  ],
+  [
+    "bun",
+    "Kan üre azotu",
+    "kidney",
+    [
+      "BUN",
+      "Kan üre azotu"
+    ],
+    [
+      "mg/dL"
+    ]
+  ],
+  [
+    "serum-ca",
+    "Kalsiyum (serum, total)",
+    "kidney",
+    [
+      "Total serum kalsiyum",
+      "Kalsiyum (serum, total)",
+      "Total kalsiyum (serum)"
+    ],
+    [
+      "mg/dL",
+      "mmol/L"
+    ]
+  ],
+  [
+    "chloride",
+    "Klorür",
+    "kidney",
+    [
+      "Klorür",
+      "Klor",
+      "Cl"
+    ],
+    [
+      "mmol/L",
+      "mEq/L"
+    ]
+  ],
+  [
+    "serum-mg",
+    "Magnezyum (serum)",
+    "kidney",
+    [
+      "Serum magnezyum",
+      "Magnezyum (serum)"
+    ],
+    [
+      "mg/dL",
+      "mmol/L"
+    ]
+  ],
+  [
+    "serum-p",
+    "Fosfor (serum)",
+    "kidney",
+    [
+      "Serum fosfor",
+      "Fosfor (serum)"
+    ],
+    [
+      "mg/dL",
+      "mmol/L"
+    ]
+  ],
+  [
+    "uric",
+    "Ürik asit (serum)",
+    "kidney",
+    [
+      "Serum ürik asit",
+      "Ürik asit (serum)"
+    ],
+    [
+      "mg/dL",
+      "µmol/L"
     ]
   ]
 ];

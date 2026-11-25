@@ -34,7 +34,16 @@ export const evidence=[
       "neut",
       "lym",
       "neutpct",
-      "lympct"
+      "lympct",
+      "mono",
+      "monopct",
+      "eos",
+      "eospct",
+      "baso",
+      "basopct",
+      "rdwsd",
+      "mpv",
+      "pdw"
     ],
     "summary": "12 laboratuvarda 3.363 K2-EDTA tam kan örneği üzerinden referans dağılımları araştırılmıştır. Yaş, cinsiyet, bölge ve analiz sistemi dikkate alınmalıdır.",
     "scope": "Kaynak adayı. Cihaz ve popülasyon uygunluğu ile tabloların sayısal aktarımı doğrulanmadan otomatik referans olarak kullanılmaz."
@@ -65,7 +74,8 @@ export const evidence=[
     "section": "Table 2.1",
     "tests": [
       "fpg",
-      "glucose"
+      "glucose",
+      "fasting-glucose"
     ],
     "summary": "En az 8 saat kalori alınmamış plazma örneğinde ≥126 mg/dL (≥7,0 mmol/L), gebelik dışı diyabet tanı ölçütlerinden biridir. Açlık durumu belirsiz ölçüm bu eşikle otomatik karşılaştırılmaz.",
     "scope": "Klinik bağlam ve doğrulama gerekir. Gebelik ölçütleri farklıdır."

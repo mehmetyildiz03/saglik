@@ -1,6 +1,46 @@
 import {catalogue,norm} from './catalog.js';
+const aliases={
+ 'mg/dL':['mg/dl','mg/dℓ'], 'g/dL':['g/dl'], 'ng/mL':['ng/ml'], 'pg/mL':['pg/ml'],
+ 'µg/dL':['ug/dL','μg/dL','mcg/dL','µg/dl'], 'µg/L':['ug/L','μg/L','mcg/L'],
+ 'µmol/L':['umol/L','μmol/L'], 'µIU/mL':['uIU/mL','μIU/mL','µIU/ml'],
+ 'mmol/L':['mmol/l'], 'mIU/L':['mIU/l'], 'pmol/L':['pmol/l'], 'nmol/L':['nmol/l'],
+ '10^3/µL':['10³/µL','10³/uL','10³/μL','10^3/uL','10^3/μL','x10^3/µL','x10^3/uL','x10^3/μL','×10³/µL','10*3/uL'],
+ '10^6/µL':['10⁶/µL','10⁶/uL','10⁶/μL','10^6/uL','10^6/μL','x10^6/µL','x10^6/uL','x10^6/μL','×10⁶/µL','10*6/uL'],
+ '10^9/L':['10⁹/L','x10^9/L','×10⁹/L','10*9/L'],
+ '10^12/L':['10¹²/L','x10^12/L','×10¹²/L','10*12/L'],
+ 'K/µL':['K/uL','K/μL'], 'M/µL':['M/uL','M/μL'],
+ 'mL/min/1.73 m²':['mL/min/1.73m²','mL/min/1.73 m2','mL/dk/1.73 m²','mL/dk/1.73 m2','mL/dk/1.73m2']
+};
+const unitSyntax=s=>String(s??'').trim().replace(/\s*\/\s*/g,'/').replace(/\s+/g,' ');
+export function normalizeUnit(raw,allowed){
+ const u=unitSyntax(raw);const matches=allowed.filter(x=>[x,...(aliases[x]||[])].some(a=>unitSyntax(a)===u));
+ return matches.length===1?matches[0]:null;
+}
 function num(s){const t=String(s??'').trim();if(!/^-?\d+(?:[.,]\d+)?$/.test(t))return null;const n=Number(t.replace(',','.'));return Number.isFinite(n)?n:null}
-export function parseLine(line){const text=String(line).trim().replace(/\s+/g,' ');const candidates=catalogue.flatMap(t=>[t[1],...t[3]].map(a=>({t,a}))).sort((a,b)=>b.a.length-a.a.length);for(const {t,a} of candidates){if(norm(text.slice(0,a.length))!==norm(a)||!/\s/.test(text.charAt(a.length)))continue;const rest=text.slice(a.length).trim();const m=rest.match(/^(-?\d+(?:[.,]\d+)?)\s+(.+)$/);if(!m)continue;for(const unit of [...t[4]].sort((x,y)=>y.length-x.length)){if(m[2].slice(0,unit.length)!==unit)continue;const tail=m[2].slice(unit.length).trim();if(tail&&!/^\s/.test(m[2].slice(unit.length)))continue;let low=null,high=null;if(tail){const bounds=tail.match(/^(-?\d+(?:[.,]\d+)?)\s*[-–]\s*(-?\d+(?:[.,]\d+)?)$/);if(!bounds)continue;low=num(bounds[1]);high=num(bounds[2]);if(low===null||high===null||low>high)continue;}return {testId:t[0],name:t[1],value:num(m[1]),unit,low,high,raw:text};}}return null}
+const names=catalogue.flatMap(t=>[t[1],...t[3]].map(a=>({t,a}))).sort((a,b)=>b.a.length-a.a.length);
+const flagPattern='H|L|Y|D|Yüksek|Düşük|\\*';
+const headPattern=new RegExp('^(?:('+flagPattern+')\\s+)?(-?\\d+(?:[.,]\\d+)?)(?:\\s+('+flagPattern+'))?\\s+(.+)$','i');
+const trailingFlag=new RegExp('(?:^|\\s)('+flagPattern+')$','i');
+export function parseLine(line){
+ const raw=String(line).trim();if(!raw||raw.length>500)return null;
+ const text=unitSyntax(raw);const found=[];
+ for(const {t,a} of names){
+  const name=unitSyntax(a);if(norm(text.slice(0,name.length))!==norm(name)||!/\s/.test(text.charAt(name.length)))continue;
+  const rest=text.slice(name.length).trim(),m=rest.match(headPattern);if(!m||m[1]&&m[3])continue;
+  const rawValue=num(m[2]);if(rawValue===null)continue;
+  const unitCandidates=t[4].flatMap(u=>[u,...(aliases[u]||[])].map(raw=>({u,raw:unitSyntax(raw)}))).sort((a,b)=>b.raw.length-a.raw.length);
+  for(const candidate of unitCandidates){
+   if(!m[4].startsWith(candidate.raw)||m[4].length>candidate.raw.length&&!/\s/.test(m[4].charAt(candidate.raw.length)))continue;
+   const unit=normalizeUnit(candidate.raw,t[4]);if(!unit)continue;
+   let suffix=m[4].slice(candidate.raw.length).trim(),reportedFlag=m[1]||m[3]||'',low=null,high=null;
+   const flag=suffix.match(trailingFlag);if(flag){if(reportedFlag)continue;reportedFlag=flag[1];suffix=suffix.slice(0,flag.index).trim()}
+   if(suffix){const bounds=suffix.match(/^(-?\d+(?:[.,]\d+)?)\s*[-–−]\s*(-?\d+(?:[.,]\d+)?)$/);if(!bounds)continue;low=num(bounds[1]);high=num(bounds[2]);if(low===null||high===null||low>high)continue;}
+   found.push({testId:t[0],name:t[1],value:rawValue,unit,rawUnit:candidate.raw,reportedFlag,low,high,raw});
+  }
+ }
+ const distinct=new Map(found.map(r=>[JSON.stringify([r.testId,r.value,r.unit,r.low,r.high,r.reportedFlag]),r]));
+ return distinct.size===1?[...distinct.values()][0]:null;
+}
 export function parseRows(rows){const recognized=[],unresolved=[];for(const {text,page} of rows){if(!text.trim())continue;const r=parseLine(text);if(r)recognized.push({...r,page});else unresolved.push({text,page});}return {recognized,unresolved}}
 
 export async function extractPDF(file,onProgress=()=>{}){

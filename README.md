@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.4.0
+# Pera Sağlık · v0.4.1
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -6,7 +6,7 @@ Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun ve
 Node.js 22+; npm install, npm test, npm run build. dist/ klasörünü HTTPS veya localhost üzerinden sun. Kök statik Pages yayını manuel kayıt ve metin aktarımını çalıştırır; PDF için dist/ derlemesi gerekir. PDF.js kararlı sürümü 6.5.438 olarak sabitlendi; paket kurulumunun ve gerçek PDF testlerinin başarıyla tamamlanması gerekir.
 
 ## Bilimsel ayrım
-Katalogdaki 45 test isim/birim eşleştirmesidir, evrensel sayısal referans değildir. Rapor aralığı, klinik karar eşiği ve tedavi hedefi ayrı bilgi türleridir. MedlinePlus, ADA 2026 ve KDIGO 2024 ve ACC/AHA 2026 kaynak kayıtları Bilim ekranındadır. Klinik otomatik tanı veya organ puanı yoktur.
+Katalogdaki 63 test isim/birim eşleştirmesidir, evrensel sayısal referans değildir. Rapor aralığı, klinik karar eşiği ve tedavi hedefi ayrı bilgi türleridir. MedlinePlus, ADA 2026 ve KDIGO 2024 ve ACC/AHA 2026 kaynak kayıtları Bilim ekranındadır. Klinik otomatik tanı veya organ puanı yoktur.
 
 ## Veri ve güvenlik
 PBKDF2-HMAC-SHA256 (600.000 iterasyon), rastgele 16 bayt tuz; AES-GCM-256 ve her kayıtta rastgele 12 bayt IV. Tüm profiller tek şifreli kasa içinde; profil başına ayrı erişim güvenliği yoktur. Aynı origin üzerinde çalışan diğer siteler tarayıcı depolamasına erişebilir. Kasa açıkken güvenilir olmayan cihaz, eklenti veya uygulama kodu risk oluşturur. 5 dakika boşta kalınca kilitlenir. Yedek alma ve geri yükleme desteklenir; parola kurtarma yoktur.
@@ -22,3 +22,6 @@ GitHub Pages için Settings > Pages > Source: GitHub Actions seçilmeli. `npm ru
 - Rapor aralığı değiştirilmez; bilimsel bilgi ayrı katmandır. 10 kaynak kaydı (NIH, Ozarda 2017, ADA 2026, KDIGO 2024, ACC/AHA 2026, WHO, NICE, Endocrine Society). Her kayıt kapsam, kaynak bağlantısı ve bölüm taşır. Klinik üretim onayı değildir.
 - Non-HDL hesaplama aynı örnek için kullanıcı doğrulaması, aynı profil, tarih, laboratuvar ve birim gerektirir. Hesap raporun orijinal ölçümü olarak kaydedilmez.
 - İlaç modülü yalnız kullanıcının bildirdiği kullanım geçmişini saklar. Etkileşim, doz önerisi veya nedensellik çıkarımı yapmaz.
+
+## v0.4.1 — Rapor kanıtı
+63 tahlillik isim/birim kataloğu; açıkça tanımlı birim yazım eşleştirmeleri (sayısal dönüşüm yok). Özgün satır, birim ve rapor işareti şifreli kayıtta korunur. Ortak tarih yerine satıra özel tarih seçilebilir. Belirsiz açlık glukozu artık açıkça plazma örneği diye etiketlenmez; eski kayıtların örnek türü kullanıcı tarafından kontrol edilmelidir. Eşitsizlikli ve kategorik sonuçlar henüz aday olarak kabul edilmez. Gerçek raporlarla klinik kabul testi ayrıca gereklidir.
