@@ -66,3 +66,8 @@ main{max-width:1548px;margin:auto;padding:0 24px 30px}#workspace{display:block;m
 
 .import-row-name .import-flag{color:var(--warning);font-weight:650}
 [data-theme=dark] .trend-readout strong,[data-theme=dark] .lab-compare-cell .lab-delta,[data-theme=dark] .lab-focus-meta small,[data-theme=dark] .lab-history-day small{color:var(--ink)}
+
+/* Theme switching is immediate, including interactive result surfaces. */
+[data-theme=dark] .lab-result-row,[data-theme=dark] .lab-filter,[data-theme=dark] #workspace nav button{transition:none}
+[data-theme=dark] .lab-result-list.card-mode .lab-result-row:not([aria-current=true]){background-color:var(--surface);color:var(--ink)}
+[data-theme=dark] .lab-result-list.card-mode .lab-result-row:not([aria-current=true]):hover{background-color:var(--surface-2)}
