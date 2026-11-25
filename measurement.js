@@ -35,6 +35,7 @@ export function changeSummary(group){
  if(!previousDates.length)return null;const previous=group.all.filter(r=>r.date===previousDates[0]);
  if(previous.length!==1||!exact(previous[0]))return null;
  const delta=group.latest[0].value-previous[0].value;
+ if(!Number.isFinite(delta))return null;
  return {delta:Number(delta.toPrecision(12)),previous:previous[0],current:group.latest[0]};
 }
 

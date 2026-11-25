@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.13.0
+# Pera Sağlık · v0.14.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -61,3 +61,6 @@ Sistem seçicisi üst banttan sol menüye taşındı. Kasa kilitlenirken veya pr
 
 ## v0.13 — Keşif turu ve renkli tahlil panosu
 Masaüstü panosunda sistem renkleri, daha güçlü sonuç tipografisi, önceki ölçümün yönü ve mini grafikler. Seçili sistemde kısa işlev açıklaması ve fizyolojiye doğrudan geçiş. Keşif turu dört bilimsel eğitim durağı içerir (dolaşım, hemogram, böbrek, karaciğer); soru ve açıklamalar mevcut kaynaklı fizyoloji modelinden türetilmiştir. İlerleme yalnız oturum içindeki tamamlanmış eğitim sorularını sayar; profil değişimi veya kilitlemede temizlenir. Ölçüm değerleri, referans sınıfları veya sağlık durumuna puan verilmez, veri girmeye yönelik ödül/seri yoktur. Kasa şeması ve tahlil motoru değişmez. Mobilde Keşif turu Diğer menüsünden erişilebilir.
+
+## v0.14 — Tahlil analiz istasyonu (P1 ilk dilim)
+Büyük grafik, gerçek zaman ekseni, seçili ve son ölçüm işaretleri, açılıp kapanan ortak rapor bandı, dönem min/maks/medyan ve güvenli fark göstergeleri. İstatistik yalnız tek kesin ölçümlü tarihlerden; yüzde pozitif önceki değerle, klinik anlam çıkarmadan hesaplanır. Ölçüm tablosu tüm gözlemleri, rapor referansını ve kaynak türünü korur. Eksik laboratuvar/yöntem karşılaştırılabilirlik kanıtı değildir. Yol haritası ve kabul ölçütleri docs/ altında. Şifreli kasa şeması değişmez.
