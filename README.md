@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.12.1
+# Pera Sağlık · v0.13.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -58,3 +58,6 @@ Yeni masaüstü yan menüsü, gerçek kayıt sayılarıyla sistem kısayolları 
 
 ## v0.12.1 — Masaüstü görünürlük
 Sistem seçicisi üst banttan sol menüye taşındı. Kasa kilitlenirken veya profil değiştirirken önceki sistem sayıları DOM'dan temizlenir. Geniş analizde sistem seçilirse sonuç panosu geri açılır. İlk ekranda 1280/1440/1920 piksel genişliklerinde en az 6/8/10 tam ölçüm kartı görünürlüğü sentetik veriyle denetlenir.
+
+## v0.13 — Keşif turu ve renkli tahlil panosu
+Masaüstü panosunda sistem renkleri, daha güçlü sonuç tipografisi, önceki ölçümün yönü ve mini grafikler. Seçili sistemde kısa işlev açıklaması ve fizyolojiye doğrudan geçiş. Keşif turu dört bilimsel eğitim durağı içerir (dolaşım, hemogram, böbrek, karaciğer); soru ve açıklamalar mevcut kaynaklı fizyoloji modelinden türetilmiştir. İlerleme yalnız oturum içindeki tamamlanmış eğitim sorularını sayar; profil değişimi veya kilitlemede temizlenir. Ölçüm değerleri, referans sınıfları veya sağlık durumuna puan verilmez, veri girmeye yönelik ödül/seri yoktur. Kasa şeması ve tahlil motoru değişmez. Mobilde Keşif turu Diğer menüsünden erişilebilir.

@@ -1,6 +1,6 @@
 import {mkdir,cp,rm,copyFile,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-const assets=['style.css','design.css','atlas.css','app.js','core.js','catalog.js','parser.js','body-map.js','health.js','evidence.js','measurement.js','dashboard.js','physiology.js','lab-view.js','trend-view.js','appearance.js','atlas.js'];
+const assets=['style.css','design.css','atlas.css','explore.css','app.js','core.js','catalog.js','parser.js','body-map.js','health.js','evidence.js','measurement.js','dashboard.js','physiology.js','lab-view.js','trend-view.js','appearance.js','atlas.js','explore.js'];
 const pkg=JSON.parse(await readFile('package.json','utf8'));
 const hash=createHash('sha256');for(const p of ['index.html','package.json',...assets])hash.update(p+'\0').update(await readFile(p)).update('\0');
 const release=hash.digest('hex').slice(0,20),dir='assets/'+release,root='dist/'+dir;
@@ -10,7 +10,7 @@ for(const p of ['pdf.mjs','pdf.worker.mjs'])await copyFile('node_modules/pdfjs-d
 for(const p of ['cmaps','standard_fonts','wasm'])await cp('node_modules/pdfjs-dist/'+p,root+'/vendor/'+p,{recursive:true});
 await copyFile('node_modules/pdfjs-dist/LICENSE',root+'/vendor/LICENSE');
 let html=await readFile('index.html','utf8');
-for(const [attr,p] of [['href','style.css'],['href','design.css'],['href','atlas.css'],['src','app.js']]){const key=attr+'="'+p+'"';if(!html.includes(key))throw Error('Missing entry asset '+p);html=html.replace(key,attr+'="'+dir+'/'+p+'"')}
+for(const [attr,p] of [['href','style.css'],['href','design.css'],['href','atlas.css'],['href','explore.css'],['src','app.js']]){const key=attr+'="'+p+'"';if(!html.includes(key))throw Error('Missing entry asset '+p);html=html.replace(key,attr+'="'+dir+'/'+p+'"')}
 await writeFile('dist/index.html',html);
 await copyFile('.nojekyll','dist/.nojekyll');
 const digests={};for(const p of assets)digests[p]=createHash('sha256').update(await readFile(root+'/'+p)).digest('hex');
