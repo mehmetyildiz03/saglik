@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.8.0
+# Pera Sağlık · v0.9.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -43,3 +43,6 @@ Tahliller açılışta son ölçüm gruplarını gösterir; tüm geçmiş tarih 
 
 ## v0.8 — Tahliller önce
 Kasa açılışında tahliller görünür. Dört ana menü: Tahliller, Geçmiş, Ekle, Diğer. Diğer işlevler korunur. Son sonuçlar sağlık sistemlerine göre gruplanır; tarihe göre tüm sonuçlar veya seçilen gün açılır. İki tarih karşılaştırması aynı ölçüm kimliği, birim, laboratuvar ve yöntem için sayısal farkı yalnız tek ve kesin değerler mevcutsa gösterir. Eşleşmeyen, çoklu ve nitel ölçümler korunur. Mobilde sabit alt menü, yoğun sonuç listesi ve en az dört tam sonuç görünürlüğü kabul testi. Tahlil ayrıntılarında düzenleme, geçmiş, bilimsel kaynak ve rapor kanıtı korunur. Kasa şeması değişmez.
+
+## v0.9 — Tasarım ve tutarlı yayın
+Masaüstünde yatay dört ana menü, geniş sonuç tablosu, tahlil seçilince aynı listeden ayrılmadan sağda detay alanı. Mobilde alt menü ve tam ekran ayrıntı korunur. Tahlil ayrıntısından doğrudan takip listesine ekleme/çıkarma; pano şeması ve sağlık kayıtları değişmez. Üretim derlemesi HTML dışındaki tüm uygulama modüllerini, CSS ve yerel PDF.js dosyalarını aynı içerik karmasına sahip dizine alır; yeni HTML eski kök CSS/JS adreslerini kullanmaz. release.json sürüm ve dosya karmalarını içerir. Önbelleğe alınmış eski HTML için sürüm parametreli URL veya yenileme gerekebilir. Yeni tasarımın doğrulaması gerçek tarayıcı testleriyle yapılır; kişisel raporlar test verisi değildir.
