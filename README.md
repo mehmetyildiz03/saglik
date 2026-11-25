@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.6.0
+# Pera Sağlık · v0.7.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -34,3 +34,6 @@ Mikroskopik /HPF biriminin önündeki ayraç korunur. Bilinmeyen mikroskopi alan
 
 ## v0.6 — Kişiselleştirme ve fizyoloji
 Her profilin ayrı şifreli pano düzeni ve en fazla 8 sabit ölçümü vardır. Varsayılanlar LDL, hemoglobin, HbA1c ve serum kreatinin olup kullanıcı kaldırabilir. Pano tercihleri ölçüm verilerini değiştirmez. Grafiklerde dönem seçimi ve yalnız tüm kesin sayısal kayıtlarda aynı rapor aralığı varsa referans bandı bulunur. Kalp dolaşımı, nefron, kan hücreleri ve karaciğer için etkileşimli özgün öğretici şemalar NIH ve ASH kaynaklarına bağlanır. Bunlar kişisel anatomi, organ işlevi veya sağlık skoru simülasyonu değildir. Gerçek rapor kabulü ve bilimsel sayısal referansların uygunluğu ayrıca doğrulanmalıdır.
+
+## v0.7 — Sonuç odaklı tahlil ekranı
+Tahliller açılışta son ölçüm gruplarını gösterir; tüm geçmiş tarih grupları halinde açılabilir. Arama katalog eş adlarını ve laboratuvar/yöntem bilgisini kapsar. Sistem, tarih, sıralama ve rapor durumuna göre filtreler vardır. Nitel, eşitsizlikli ve referansı bilinmeyen kayıtlar ayrı inceleme grubundadır. Son tarihte birden çok ölçüm seçilmeden gruplanır. Ölçüm ayrıntısı geçmiş tarih seçimi, sayısal grafik (uygunsa), kaynak ve düzenleme içerir. Manuel form ayrı sayfada, referans bilgisi isteğe bağlı bölümdedir. Varsayılan son sonuçlar, 40 satırlık sayfalama ve geçici filtreler kullanılır; hiçbir mevcut sağlık verisi veya kasa şeması değiştirilmez.
