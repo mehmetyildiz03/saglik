@@ -34,7 +34,7 @@ $('restoreForm').onsubmit=async e=>{e.preventDefault();if(busy)return;busy=true;
 $('lock').onclick=lock;$('brand').onclick=e=>{e.preventDefault();if(data&&!busy)navigate('labs')};
 function profiles(){const s=$('profileSelect');s.replaceChildren();for(const p of data.profiles){const o=el('option',p.name);o.value=p.id;s.append(o)}s.value=profileId}
 $('profileSelect').onchange=()=>{if(busy){$('profileSelect').value=profileId;return}profileId=$('profileSelect').value;resetLabView();importMode='pdf';pending=null;editId=medEditId=null;selectedSystem='';filter='';timelineFilter=scienceFilter='all';render('labs')};
-function navigate(target){if(!data||busy)return;if(target==='labs'){labDetail=null;editId=null;labAdd=false;labNotice=''}render(target);window.scrollTo(0,0)}
+function navigate(target){if(!data||busy)return;if(target==='import'&&page==='import'&&pending){if(!confirm('Yeni rapor eklemek için mevcut ön inceleme ve seçimler temizlensin mi?'))return;pending=null;importMode='pdf'}if(target==='labs'){labDetail=null;editId=null;labAdd=false;labNotice=''}render(target);window.scrollTo(0,0)}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>navigate(b.dataset.page));
 const active=kind=>data[kind].filter(r=>r.profileId===profileId);
 function panel(title,body,cls=''){const p=el('div',undefined,'panel '+cls);if(title)p.append(el('h2',title));if(body)p.append(el('p',body));return p}
@@ -196,11 +196,11 @@ function importPage(c){
  function syncSelection(){const n=fields.filter(x=>x.check.checked).length;selectionCount.textContent=n+' / '+fields.length+' seçili';for(const x of fields)x.row.dataset.checked=String(x.check.checked);selectAll.disabled=!fields.length||n===fields.length;clear.disabled=n===0;const submit=review.querySelector('button[type=submit]');if(submit)submit.disabled=n===0}
  for(const r of current.recognized.slice(0,200)){
   const row=el('div',undefined,'import-row'),top=el('div',undefined,'import-row-top'),label=el('label',undefined,'checkrow import-check'),check=el('input');check.type='checkbox';check.setAttribute('aria-label',r.name+' · '+resultLabel(r)+' doğrulandı');label.append(check);
-  const name=el('div',undefined,'import-row-name');name.append(el('strong',r.name),el('small',r.page?'Sayfa '+r.page:'Metin satırı'));label.append(name);
+  const name=el('div',undefined,'import-row-name');name.append(el('strong',r.name),el('small',r.page?'Sayfa '+r.page:'Metin satırı'));if(r.reportedFlag)name.append(el('small','Rapor işareti: '+r.reportedFlag,'import-flag'));label.append(name);
   const display=el('div',undefined,'import-value');display.append(el('strong',resultLabel(r)),el('small',safeReference(r)?'Ref. '+safeReference(r):'Referans yok'));top.append(label,display);
   const details=el('details',undefined,'import-row-details'),summary=el('summary','Düzenle / özgün satır'),g=el('div',undefined,'form-grid'),value=labelField(g,'value','Sonuç','text',inputResult(r),false),unit=labelField(g,'unit','Birim','text',r.unit,false),low=labelField(g,'low','Alt sınır','text',r.low??'',false),high=labelField(g,'high','Üst sınır','text',r.high??'',false),rowDate=labelField(g,'rowDate','Satıra özel tarih (varsa)','date','',false),refText=labelField(g,'refText','Metinsel referans','text',r.referenceText||'',false);
   details.append(summary,el('p',(r.page?'Sayfa '+r.page+' · ':'')+r.raw,'raw'),g);
-  if(r.reportedFlag)details.append(el('p','Rapor işareti: '+r.reportedFlag+' · doğrula','muted'));
+  if(r.reportedFlag)details.append(el('p','Rapor işareti özgün rapordan gelir; klinik sınıflandırma değildir.','muted'));
   if(r.rawUnit&&r.rawUnit!==r.unit)details.append(el('p','Özgün birim: '+r.rawUnit+' → '+r.unit+' (sayısal dönüşüm yok)','muted'));
   function updatePreview(){const parsed=parseResult(value.value,r.testId);display.replaceChildren(el('strong',parsed?resultLabel({...parsed,unit:unit.value}):'Sonuç kontrol edilmeli'),el('small',refText.value?'Ref. '+refText.value:low.value!==''&&high.value!==''?'Ref. '+low.value+' – '+high.value:'Referans yok'));check.checked=false;syncSelection()}
   for(const input of [value,unit,low,high,rowDate,refText])input.addEventListener('input',updatePreview);

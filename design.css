@@ -63,3 +63,6 @@ main{max-width:1548px;margin:auto;padding:0 24px 30px}#workspace{display:block;m
 [data-theme=dark] .trend:not(.lab-trend-svg){background:#f5f8f3;border-radius:10px}
 [data-theme=dark] .ref-arrow{stroke:#223246}
 @media(max-width:740px){[data-theme=dark] #workspace aside{background:var(--surface);border-color:var(--line)}[data-theme=dark] .lab-detail-pane{background:transparent;border:0}}
+
+.import-row-name .import-flag{color:var(--warning);font-weight:650}
+[data-theme=dark] .trend-readout strong,[data-theme=dark] .lab-compare-cell .lab-delta,[data-theme=dark] .lab-focus-meta small,[data-theme=dark] .lab-history-day small{color:var(--ink)}
