@@ -1,5 +1,6 @@
 import {validMedication} from './health.js';
 import {validResult,referenceTextValid,exact} from './measurement.js';
+import {validDashboard} from './dashboard.js';
 export const KEY='pera-v1';
 const enc=new TextEncoder(),dec=new TextDecoder(),MAX=8*1024*1024;
 const b64=b=>{const a=new Uint8Array(b);let s='';for(let i=0;i<a.length;i+=16384)s+=String.fromCharCode(...a.subarray(i,i+16384));return btoa(s)};
@@ -14,7 +15,7 @@ export function normalizeData(input){
  let d=input;if(d.version===1)d={...empty(),labs:d.labs.map(r=>({...r,profileId:'self',origin:'manual'})),notes:d.notes.map(r=>({...r,profileId:'self'}))};
  if(d.version===2)d={...d,version:3,profiles:d.profiles?.map(p=>({...p,referenceMode:'report'})),meds:[]};
  if(d.version!==3||!Array.isArray(d.meds)||d.meds.length>3000||!Array.isArray(d.profiles)||d.profiles.length<1||d.profiles.length>20||d.labs.length>10000||d.notes.length>3000)throw Error('Kasa sınırları aşıldı veya sürümü desteklenmiyor.');
- const ids=new Set();for(const p of d.profiles){if(!p||!short(p.id,100)||!short(p.name,80)||ids.has(p.id)||!['report','context'].includes(p.referenceMode))throw Error('Profil verisi geçersiz.');ids.add(p.id)}
+ const ids=new Set();for(const p of d.profiles){if(!p||!short(p.id,100)||!short(p.name,80)||ids.has(p.id)||!['report','context'].includes(p.referenceMode)||p.dashboard!==undefined&&!validDashboard(p.dashboard))throw Error('Profil verisi geçersiz.');ids.add(p.id)}
  const records=new Set();for(const r of [...d.labs,...d.notes,...d.meds]){if(!r||!short(r.id,100)||records.has(r.id)||!ids.has(r.profileId)||!validDate(r.date))throw Error('Kayıt kimliği veya tarihi geçersiz.');records.add(r.id)}
  for(const r of d.labs){if(!short(r.name)||!validResult(r)||!referenceTextValid(r.referenceText??'')||!!r.referenceText&&(r.low!==null||r.high!==null)||!optional(r.testId,80)||!optional(r.lab)||!optional(r.method)||!optional(r.rawUnit,80)||!optional(r.reportedFlag,24)||!optional(r.sourceLine,500)||!['manual','pdf','text'].includes(r.origin??'manual')||!(r.low===null&&r.high===null||Number.isFinite(r.low)&&Number.isFinite(r.high)&&r.low<=r.high)||!(r.page===undefined||r.page===null||Number.isInteger(r.page)&&r.page>=1&&r.page<=50))throw Error('Tahlil verisi geçersiz.')}
  for(const r of d.notes){if(!short(r.text,4000))throw Error('Günlük verisi geçersiz.')}

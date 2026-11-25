@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.5.1
+# Pera Sağlık · v0.6.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -31,3 +31,6 @@ GitHub Pages için Settings > Pages > Source: GitHub Actions seçilmeli. `npm ru
 
 ## v0.5.1 — Veri kalitesi
 Mikroskopik /HPF biriminin önündeki ayraç korunur. Bilinmeyen mikroskopi alan birimleri eşleştirilmez. Grafik çizgileri aynı gün birden fazla ölçüm veya sınır bildiren ara ölçüm olduğunda kesilir. Eşdeğer görünen kayıtlar kullanıcı seçimine göre korunabilir veya atlanabilir.
+
+## v0.6 — Kişiselleştirme ve fizyoloji
+Her profilin ayrı şifreli pano düzeni ve en fazla 8 sabit ölçümü vardır. Varsayılanlar LDL, hemoglobin, HbA1c ve serum kreatinin olup kullanıcı kaldırabilir. Pano tercihleri ölçüm verilerini değiştirmez. Grafiklerde dönem seçimi ve yalnız tüm kesin sayısal kayıtlarda aynı rapor aralığı varsa referans bandı bulunur. Kalp dolaşımı, nefron, kan hücreleri ve karaciğer için etkileşimli özgün öğretici şemalar NIH ve ASH kaynaklarına bağlanır. Bunlar kişisel anatomi, organ işlevi veya sağlık skoru simülasyonu değildir. Gerçek rapor kabulü ve bilimsel sayısal referansların uygunluğu ayrıca doğrulanmalıdır.
