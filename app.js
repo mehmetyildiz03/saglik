@@ -8,7 +8,7 @@ import {sparkline,trendPanel} from './trend-view.js';
 import {readAppearance,saveAppearance,rangeDisplay,effectiveLayout} from './appearance.js';
 import {systemNames,systemSummary,systemIcon} from './atlas.js';
 import {newExploration,exploreView} from './explore.js';
-import {defaultLabView,labView,byDay,rowCategory,compareDates,visibleScope} from './lab-view.js';
+import {defaultLabView,labView,byDay,rowCategory,compareSelectedDates,visibleScope} from './lab-view.js';
 import {evidence,forTest,forGroup} from './evidence.js';
 import {timeline,activeMedication,nonHDL} from './health.js';
 import {exact,resultLabel,inputResult,parseResult,isQualitativeTest,safeReference,latestGroups,changeSummary,referenceTextValid,measurementKey,trendConnections} from './measurement.js';
@@ -146,18 +146,44 @@ function labList(c,rows){
 }
 function drawComparison(list,rows,days){
  if(days.length<2){list.append(el('div','Karşılaştırma için en az iki farklı ölçüm tarihi gerekli.','empty'));return}
- const dates=days.map(d=>d.date);if(!comparePair||!dates.includes(comparePair.older)||!dates.includes(comparePair.newer))comparePair={older:dates[1],newer:dates[0]};
- const bar=el('div',undefined,'lab-compare-dates'),opts=days.map(d=>[d.date,shortLabDate(d.date)]),old=fieldSelect(bar,'compareOlder','İlk tarih',opts,comparePair.older),now=fieldSelect(bar,'compareNewer','İkinci tarih',opts,comparePair.newer),result=el('div',undefined,'lab-compare-result');list.append(bar,result);
- const swap=btn('Tarihleri değiştir',()=>{const a=old.value,b=now.value;if(a>b){old.value=b;now.value=a;refresh()}},'quiet compare-swap');bar.append(swap);
- function refresh(){comparePair={older:old.value,newer:now.value};result.replaceChildren();swap.hidden=old.value<=now.value;
- if(old.value>=now.value){result.append(el('div','İlk tarih ikinci tarihten önce olmalı.','empty'));return}
- const groups=compareDates(rows,old.value,now.value,{...labPrefs,pinIds:dashboardFor(currentProfile()).pins});if(!groups.length){result.append(el('div','Seçilen tarihlerde bu filtreye uygun kayıt yok.','empty'));return}
- const labels=el('div',undefined,'lab-compare-labels');labels.append(el('span','Tahlil'),el('span',shortLabDate(old.value)),el('span',shortLabDate(now.value)));result.append(labels);
- const valueFor=a=>!a.length?'—':a.length>1?a.length+' kayıt':resultLabel(a[0]);let shown=0;
- for(const g of groups.slice(0,labLimit)){const b=btn('',()=>{const a=g.after.length?g.after:g.before;openLabDetail({key:g.key,date:a[0].date,id:a.length===1?a[0].id:null})},'lab-compare-row');const name=el('div',undefined,'lab-compare-name'),rec=g.after[0]||g.before[0];name.append(el('strong',g.name),el('small',[rec.lab,rec.method].filter(Boolean).join(' · ')||'Lab./yöntem belirsiz'));const before=el('div',undefined,'lab-compare-cell'),after=el('div',undefined,'lab-compare-cell');before.append(el('strong',valueFor(g.before)));after.append(el('strong',valueFor(g.after)));if(g.before.length===1)before.append(statusChip(g.before[0]));if(g.after.length===1)after.append(statusChip(g.after[0]));if(g.delta!==null)after.append(el('small','Δ '+(g.delta>0?'+':'')+g.delta+(rec.unit&&rec.unit!=='1'?' '+rec.unit:''),'lab-delta'));b.append(name,before,after);result.append(b);shown++}
- if(groups.length>shown)result.append(btn('40 sonuç daha göster',()=>{labLimit+=40;refresh()}));
- result.append(el('p','— kayıt yok. Δ sayısal farktır; klinik iyileşme veya kötüleşme anlamına gelmez. Farklı birim, laboratuvar ve yöntemler birleştirilmez.','muted compare-note'))}
- old.onchange=now.onchange=()=>{labLimit=40;refresh()};refresh();
+ const dates=days.map(d=>d.date),defaults=count=>({count,older:dates[count-1],middle:dates[1],newer:dates[0],lab:'',method:''});
+ if(!comparePair||!dates.includes(comparePair.older)||!dates.includes(comparePair.newer)||comparePair.count===3&&(!dates.includes(comparePair.middle)||dates.length<3))comparePair=defaults(2);
+ const mode=el('div',undefined,'compare-presets');mode.append(el('strong','Tarih karşılaştırması'));for(const count of [2,3]){const button=btn('Son '+count+' tarih',()=>{const saved={lab:comparePair.lab,method:comparePair.method};comparePair={...defaults(count),...saved};labLimit=40;render('labs')},'compare-preset');button.setAttribute('aria-pressed',String((comparePair.count||2)===count));button.disabled=dates.length<count;mode.append(button)}list.append(mode);
+ const count=comparePair.count||2,bar=el('div',undefined,'lab-compare-dates comparison-date-grid'),opts=days.map(d=>[d.date,shortLabDate(d.date)]);bar.dataset.columns=String(count);
+ const old=fieldSelect(bar,'compareOlder','İlk tarih',opts,comparePair.older),middle=count===3?fieldSelect(bar,'compareMiddle','İkinci tarih',opts,comparePair.middle):null,now=fieldSelect(bar,'compareNewer',count===3?'Üçüncü tarih':'İkinci tarih',opts,comparePair.newer);
+ const result=el('div',undefined,'lab-compare-result comparison-matrix');result.dataset.columns=String(count);list.append(bar);
+ const filters=el('details',undefined,'comparison-filters'),filterHead=el('summary','Laboratuvar ve yöntem filtreleri'),filterGrid=el('div',undefined,'comparison-filter-grid');
+ const filterOptions=key=>[['','Tümü'],...[...new Set(rows.map(r=>r[key]||''))].sort((a,b)=>a.localeCompare(b,'tr')).map(v=>[JSON.stringify(v),v||'Belirtilmemiş'])];
+ const lab=fieldSelect(filterGrid,'compareLab','Laboratuvar',filterOptions('lab'),comparePair.lab||''),method=fieldSelect(filterGrid,'compareMethod','Yöntem',filterOptions('method'),comparePair.method||'');
+ filters.open=!!(lab.value||method.value);filters.append(filterHead,filterGrid);list.append(filters,result);
+ const dateInputs=[old,...(middle?[middle]:[]),now],selectedDates=()=>dateInputs.map(x=>x.value);
+ const order=btn('Tarihleri sırala',()=>{const sorted=selectedDates().sort();dateInputs.forEach((x,i)=>{x.value=sorted[i]});refresh()},'quiet compare-swap');bar.append(order);
+ function refresh(){
+  const selected=selectedDates();comparePair={count,older:old.value,middle:middle?.value||dates[1],newer:now.value,lab:lab.value,method:method.value};result.replaceChildren();filterHead.textContent='Laboratuvar ve yöntem filtreleri'+(lab.value||method.value?' · etkin':'');
+  const valid=selected.every((date,i)=>i===0||date>selected[i-1]);order.hidden=valid||new Set(selected).size!==count;
+  if(!valid){result.append(el('div','Farklı tarihleri eskiden yeniye seç.','empty'));return}
+  const options={...labPrefs,pinIds:dashboardFor(currentProfile()).pins,profileId};if(lab.value)options.labFilter=JSON.parse(lab.value);if(method.value)options.methodFilter=JSON.parse(method.value);
+  const groups=compareSelectedDates(rows,selected,options);if(!groups.length){result.append(el('div','Seçilen tarihlerde bu filtreye uygun kayıt yok.','empty'));return}
+  const labels=el('div',undefined,'lab-compare-labels comparison-head');labels.append(el('span','Tahlil / ölçüm grubu'));for(const date of selected)labels.append(el('span',shortLabDate(date)));result.append(labels);
+  for(const g of groups.slice(0,labLimit)){
+   const row=el('section',undefined,'lab-compare-row comparison-row');row.dataset.columns=String(count);row.dataset.system=g.category;
+   const name=el('div',undefined,'lab-compare-name comparison-name');const title=el('strong',g.name);name.append(title,el('small','Laboratuvar: '+(g.lab||'Belirtilmemiş')),el('small','Yöntem: '+(g.method||'Belirtilmemiş')));if(!g.lab||!g.method)name.append(el('small','Karşılaştırılabilirlik doğrulanmış değil','comparison-uncertain'));row.append(name);
+   for(const [i,column] of g.columns.entries()){
+    const cell=el('div',undefined,'lab-compare-cell comparison-cell');cell.dataset.date=column.date;cell.append(el('small',shortLabDate(column.date),'comparison-date-label'));
+    if(!column.records.length){cell.append(el('strong','—'),el('small','Kayıt yok'))}
+    else{
+     if(column.records.length>1)cell.append(el('small',column.records.length+' ayrı ölçüm · fark yok','comparison-multiple'));
+     for(const r of column.records){const open=btn('',()=>openLabDetail({key:g.key,date:r.date,id:r.id}),'comparison-record');open.setAttribute('aria-label',g.name+' · '+shortLabDate(r.date)+' · '+resultLabel(r)+' kaydını aç');open.append(el('strong',resultLabel(r)),statusChip(r),el('small','Ref. '+(safeReference(r)||'Belirtilmemiş')));cell.append(open)}
+     if(i>0&&column.delta!==null)cell.append(el('small','Δ '+(column.delta>0?'+':'')+column.delta+(g.unit&&g.unit!=='1'?' '+g.unit:''),'lab-delta comparison-delta'))
+    }
+    row.append(cell)
+   }
+   result.append(row)
+  }
+  if(groups.length>labLimit)result.append(btn('40 sonuç daha göster',()=>{labLimit+=40;refresh()}));
+  result.append(el('p','— kayıt yok. Δ yalnız seçilen komşu tarih sütunları arasındaki sayısal farktır; klinik iyileşme veya kötüleşme anlamına gelmez. Aradaki seçilmemiş tarihler bu farkın kapsamında değildir. Farklı birim, laboratuvar ve yöntemler birleştirilmez.','muted compare-note'))
+ }
+ for(const x of [...dateInputs,lab,method])x.onchange=()=>{labLimit=40;refresh()};refresh();
 }
 function labDetails(c,rows){
  const days=byDay(rows),selected=days.find(x=>x.date===labDetail.date)||days[0];labDetail.date=selected.date;const current=labDetail.id?selected.records.find(r=>r.id===labDetail.id):null,focus=current?[current]:selected.records,r=focus[0];

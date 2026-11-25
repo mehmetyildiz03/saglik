@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.14.0
+# Pera Sağlık · v0.15.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -64,3 +64,6 @@ Masaüstü panosunda sistem renkleri, daha güçlü sonuç tipografisi, önceki 
 
 ## v0.14 — Tahlil analiz istasyonu (P1 ilk dilim)
 Büyük grafik, gerçek zaman ekseni, seçili ve son ölçüm işaretleri, açılıp kapanan ortak rapor bandı, dönem min/maks/medyan ve güvenli fark göstergeleri. İstatistik yalnız tek kesin ölçümlü tarihlerden; yüzde pozitif önceki değerle, klinik anlam çıkarmadan hesaplanır. Ölçüm tablosu tüm gözlemleri, rapor referansını ve kaynak türünü korur. Eksik laboratuvar/yöntem karşılaştırılabilirlik kanıtı değildir. Yol haritası ve kabul ölçütleri docs/ altında. Şifreli kasa şeması değişmez.
+
+## v0.15 — Çok tarihli tahlil karşılaştırması
+Son iki/üç tarih kısayolları, farklı tarihlerin elle seçimi, laboratuvar ve yöntem filtreleri. Her hücre özgün sonucu ve referansı korur; aynı gün birden çok kayıt ayrı açılır. Eksik ölçüm sıfır sayılmaz. Δ yalnız seçilen komşu sütunlarda aynı profilde ve aynı ölçüm grubunda tek kesin sonuçlar varsa hesaplanır. Eksik metadata uyarısı görünür; fark tanı veya klinik değişim değildir. Kasa şeması değişmez.
