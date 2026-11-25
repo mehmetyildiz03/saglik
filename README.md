@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.7.0
+# Pera Sağlık · v0.7.1
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -37,3 +37,6 @@ Her profilin ayrı şifreli pano düzeni ve en fazla 8 sabit ölçümü vardır.
 
 ## v0.7 — Sonuç odaklı tahlil ekranı
 Tahliller açılışta son ölçüm gruplarını gösterir; tüm geçmiş tarih grupları halinde açılabilir. Arama katalog eş adlarını ve laboratuvar/yöntem bilgisini kapsar. Sistem, tarih, sıralama ve rapor durumuna göre filtreler vardır. Nitel, eşitsizlikli ve referansı bilinmeyen kayıtlar ayrı inceleme grubundadır. Son tarihte birden çok ölçüm seçilmeden gruplanır. Ölçüm ayrıntısı geçmiş tarih seçimi, sayısal grafik (uygunsa), kaynak ve düzenleme içerir. Manuel form ayrı sayfada, referans bilgisi isteğe bağlı bölümdedir. Varsayılan son sonuçlar, 40 satırlık sayfalama ve geçici filtreler kullanılır; hiçbir mevcut sağlık verisi veya kasa şeması değiştirilmez.
+
+## v0.7.1 — Mobil sonuç görünürlüğü
+Özetler ve başlıklar sıkıştırıldı; sistem, tarih ve sıralama filtreleri tek düğmeyle açılır, kapalıyken etkin filtre sayısı ve adları görünür. Arama, son/tüm kayıt ve referans durumu filtreleri her zaman erişilebilir. Mobil tarayıcı testi ilk sonucun 390×844 ve 360×800 ekranlarda kaydırmadan bütünüyle görünmesini şart koşar. Tek tarihli kesin ölçümler için boş eğilim grafiği yerine açıklama; rapor ayrıntıları grafikten önce gösterilir. Kasa ve tahlil verileri değişmez.
