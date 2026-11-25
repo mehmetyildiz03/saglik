@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.10.0
+# Pera Sağlık · v0.11.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -49,3 +49,6 @@ Masaüstünde yatay dört ana menü, geniş sonuç tablosu, tahlil seçilince ay
 
 ## v0.10 — Tahlil kısayolları ve grafikler
 Son ölçüm tarihine tek tıklamayla erişim ve profilin mevcut takip listesini kullanan geçici takip filtresi. Sonuç tablosunda son 12 tarih için küçük grafikler, tahlil ayrıntısında seçilebilir tarih, dönem ve doğrudan kaydı açma. Farklı ölçüm grupları karıştırılmaz; sınır bildiren, nitel ve aynı tarihte birden fazla olan kayıtlar çizgiyi keser. Grafik aralığı yalnız eşleşen rapor referanslarından alınır. Kasa şeması, kayıtlar ve mevcut bilimsel kaynaklar değiştirilmez.
+
+## v0.11 — Görünüm ve rapor inceleme
+Tahlillerin mevcut liste görünümü varsayılan; isteğe bağlı kart görünümü aynı sonuç ve filtreleri kullanır. Açık/koyu tema ve görünüm tercihi bu cihazda ayrı bir anahtarda yalnız iki görsel tercih olarak saklanır; sağlık verisi veya profil kimliği içermez. Referans göstergesi kesin sayısal ölçüm ve geçerli iki taraflı rapor aralığı gerektirir. Aralık dışı konumlar kategoriktir, şiddet puanı değildir. PDF/metin seçimi ve doğrulama ayrı adımlar. Adaylar varsayılan seçili değildir; toplu seçim ancak açık doğrulamayla yapılır; bir aday ya da ortak rapor bilgisi düzenlenince onay kaldırılır. 200 aday sınırı korunur, okunmayan satırlar ayrı tutulur. Yeni sürüm şifreli veri şemasını değiştirmez; taranmış PDF/OCR ve gerçek rapor klinik doğrulaması henüz kapsam dışıdır.
