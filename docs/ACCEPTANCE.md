@@ -16,3 +16,8 @@ Her sürüm için, aşağıdaki koşullar uygulanabilir olduğu ölçüde zorunl
 - Şifreli kasa, profil ayrımı, kilit ve yedek testleri geçer. Sağlık verisi/şifre ağ isteklerinde veya loglarda yok. Gerçek hasta verisi depoya girmez.
 - İçerik karmalı aynı sürüm varlıkları; build manifest ve HTML ilişkisi doğrulanır. Aday dalının Pages dağıtımı yoktur. main commit koşusu başarı olmadan "yayında" yazılmaz.
 - Her döngüde: değişen dosyalar, commit, koşu URL'si, gerçek test sayıları ve kalan sorunlar PROGRESS.md'ye eklenir. Başarısız test düzeltilmeden ilerleme yok.
+
+## Sürekli kabul — 26 Kasım plan denetimi
+- Her dilim için en az bir işlevsel tarayıcı regresyonu, ilgili olumsuz veri fikstürleri, klavye erişimi, masaüstü/mobil taşma ve temel güvenlik regresyonu. Kapsamlı WCAG, Firefox/WebKit ve yüksek hacimli performans ölçümleri ayrı açık maddelerdir; bunlar doğrulanmadan tam uyum iddia edilmez.
+- P2: seçilen 2 veya 3 farklı tarih kronolojik olmalı. Her hücre kendi tarihindeki tüm kayıtları korur; eksik hücre boş/—, sıfır değildir. Birden fazla veya nitel/sınırlı ölçümde otomatik sayısal fark yok. Fark yalnız seçilen iki komşu sütun arasında tek kesin sayılarla ve aynı profilde/ölçüm grubunda; aradaki seçilmemiş kayıtların trendini temsil etmez. Rapor referansları her hücrede görünür; ayrı kayıtlar doğrudan açılabilir. Bilinmeyen laboratuvar/yöntem için açıklama zorunlu. Farkın rengi artış/azalışın klinik anlamı olduğunu düşündürmez.
+- Aday dalı CI başarı kaydı ve aday SHA eşleşmeli. Aynı commit main'e alındıktan sonra Pages sonucu ayrı doğrulanır. Bekleyen veya başarısız CI sırasında aynı iş için başka aday açılmaz.
