@@ -39,5 +39,5 @@ Her planlı çalışmada önce main ve aday dalı, GitHub Actions, docs/PROGRESS
 
 İlgili belgeler: [Kabul kriterleri](ACCEPTANCE.md), [Araştırma kaydı](RESEARCH.md), [İlerleme günlüğü](PROGRESS.md).
 
-## Planlı çalışma düzeni
-Hedef saatlik geliştirme döngüsü (Türkiye saati); gün bazlı bekleme kaldırıldı. Otomasyon gerçek zamanlaması görev kaydı üzerinden doğrulanır. Önce açık aday ve main dağıtımı denetlenir; yeşil aday kabul şartları ile main'e alınır. Başarısız aday düzeltilir; çalışan CI varsa yeni paralel aday açılmaz. Erişim/izin engeli varsa açıkça kaydedilir, geçilmiş sayılmaz. Aynı iş için çakışan çalışmalar yapılmaz. Çalışma aralığı bir saat kesintisiz yürütme veya belirli bitiş süresi garantisi değildir.
+## Manuel çalışma düzeni
+26 Kasım 2026: kullanıcının isteğiyle otomasyon kapalı bırakılır; geliştirme yalnız sohbet içindeki açık isteklerle sürdürülür. Aday kabul kapıları, araştırma ve ilerleme kaydı korunur. Önce açık aday ve main dağıtımı kontrol edilir; çalışan CI için paralel aday açılmaz. Tarih bazlı bekleme yoktur.

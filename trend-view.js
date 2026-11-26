@@ -20,18 +20,19 @@ export function axisDates(dates,maxTicks){
  for(let i=1;i<maxTicks-1;i++){const target=first+(last-first)*i/(maxTicks-1);let best=null;for(const d of dates.slice(1,-1)){if(out.includes(d)||dayTime(d)<=dayTime(out.at(-1)))continue;if(!best||Math.abs(dayTime(d)-target)<Math.abs(dayTime(best)-target))best=d}if(best&&dayTime(best)-dayTime(out.at(-1))>=(last-first)/(maxTicks*1.5)&&last-dayTime(best)>=(last-first)/(maxTicks*1.5))out.push(best)}
  out.push(dates.at(-1));return out
 }
-export function trendModel(rows,{width=440,height=200,axes=true,limit=0,band=true}={}){
+export function trendModel(rows,{width=440,height=200,axes=true,limit=0,band=true,domain=null}={}){
  if(!identityOK(rows))return null;
  const map=new Map();for(const r of rows){if(!Number.isFinite(dayTime(r.date)))return null;const a=map.get(r.date)||[];a.push(r);map.set(r.date,a)}
- let dates=[...map.keys()].sort();if(limit>0)dates=dates.slice(-limit);if(dates.length<2)return null;
- const days=dates.map(date=>({date,records:map.get(date)})),full=days.flatMap(d=>d.records),numeric=full.filter(exact);if(new Set(numeric.map(r=>r.date)).size<2)return null;
+ let dates=[...map.keys()].sort();if(limit>0)dates=dates.slice(-limit);if(!dates.length||!domain&&dates.length<2)return null;
+ const days=dates.map(date=>({date,records:map.get(date)})),full=days.flatMap(d=>d.records),numeric=full.filter(exact);if(!numeric.length||!domain&&new Set(numeric.map(r=>r.date)).size<2)return null;
+ if(domain&&(!Number.isFinite(dayTime(domain.start))||!Number.isFinite(dayTime(domain.end))||domain.start>domain.end||dates[0]<domain.start||dates.at(-1)>domain.end))return null;
  const reference=band?rangeBand(full):null,values=numeric.map(r=>r.value);if(reference)values.push(reference.low,reference.high);
- const scale=Math.max(1,...values.map(Math.abs)),min=Math.min(...values.map(v=>v/scale)),max=Math.max(...values.map(v=>v/scale)),span=max-min||Math.max(.05,Math.abs(min)*.12),lo=min-span*.12,hi=max+span*.12;
- const left=axes?53:5,right=width-(axes?18:5),top=axes?12:4,bottom=height-(axes?28:4),first=dayTime(dates[0]),last=dayTime(dates.at(-1)),x=d=>left+(right-left)*(dayTime(d)-first)/(last-first),y=v=>bottom-(bottom-top)*((v/scale-lo)/(hi-lo));
+ let scale=1;for(const v of values)scale=Math.max(scale,Math.abs(v));let min=Infinity,max=-Infinity;for(const v of values){min=Math.min(min,v/scale);max=Math.max(max,v/scale)}const span=max-min||Math.max(.05,Math.abs(min)*.12),lo=min-span*.12,hi=max+span*.12;
+ const left=axes?53:5,right=width-(axes?18:5),top=axes?12:4,bottom=height-(axes?28:4),first=dayTime(domain?.start||dates[0]),last=dayTime(domain?.end||dates.at(-1)),x=d=>first===last?(left+right)/2:left+(right-left)*(dayTime(d)-first)/(last-first),y=v=>bottom-(bottom-top)*((v/scale-lo)/(hi-lo));
  const points=numeric.map(r=>({id:r.id,date:r.date,value:r.value,x:x(r.date),y:y(r.value),record:r}));const byId=new Map(points.map(p=>[p.id,p]));
  const lines=trendConnections(full).map(([a,b])=>[byId.get(a.id),byId.get(b.id)]).filter(([a,b])=>a&&b);
  const ticks=Array.from({length:4},(_,i)=>{const scaled=lo+(hi-lo)*i/3;const v=scaled*scale;return {y:bottom-(bottom-top)*i/3,label:Number.isFinite(v)?String(Number(v.toPrecision(4))):''}});
- return {width,height,left,right,top,bottom,days,points,lines,ticks,dateTicks:axisDates(dates,width>=700?5:3).map(date=>({date,x:x(date)})),dayPositions:days.map(d=>({date:d.date,x:x(d.date)})),latestDate:dates.at(-1),reference:reference?{...reference,y:y(reference.high),height:y(reference.low)-y(reference.high)}:null,gaps:days.filter(d=>d.records.length!==1||!exact(d.records[0])).map(d=>({date:d.date,x:x(d.date),count:d.records.length}))};
+ return {width,height,left,right,top,bottom,days,points,lines,ticks,dateTicks:(domain?[...new Set([domain.start,...(domain.ticks||[]).filter(d=>Number.isFinite(dayTime(d))&&d>=domain.start&&d<=domain.end),domain.end])].sort():axisDates(dates,width>=700?5:3)).map(date=>({date,x:x(date)})),domain:domain?{start:domain.start,end:domain.end}:null,dayPositions:days.map(d=>({date:d.date,x:x(d.date)})),latestDate:dates.at(-1),reference:reference?{...reference,y:y(reference.high),height:y(reference.low)-y(reference.high)}:null,gaps:days.filter(d=>d.records.length!==1||!exact(d.records[0])).map(d=>({date:d.date,x:x(d.date),count:d.records.length}))};
 }
 const ns='http://www.w3.org/2000/svg';
 function S(tag,attrs={}){const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));return n}
@@ -43,7 +44,7 @@ function chartSVG(model,small,selected,onPick){
  if(!small){
   for(const t of ticks){svg.append(S('line',{x1:left,x2:right,y1:t.y,y2:t.y,stroke:'var(--chart-grid, #dfe7ee)','stroke-width':1}));const label=S('text',{x:left-7,y:t.y+4,'text-anchor':'end',fill:'var(--chart-label, #657789)','font-size':11});label.textContent=t.label;svg.append(label)}
   if(reference){for(const y of [reference.y,reference.y+reference.height])svg.append(S('line',{x1:left,x2:right,y1:y,y2:y,stroke:'var(--chart-line, #167b81)','stroke-width':1,'stroke-opacity':.55,'stroke-dasharray':'4 4',class:'trend-reference-boundary'}))}
-  for(const [i,tick] of dateTicks.entries()){const align=i===0?'start':i===dateTicks.length-1?'end':'middle',t=S('text',{x:tick.x,y:height-8,fill:'var(--chart-label, #657789)','font-size':11,'text-anchor':align});t.textContent=dateLabel(tick.date);svg.append(t)}
+  for(const [i,tick] of dateTicks.entries()){const align=dateTicks.length===1?'middle':i===0?'start':i===dateTicks.length-1?'end':'middle',t=S('text',{x:tick.x,y:height-8,fill:'var(--chart-label, #657789)','font-size':11,'text-anchor':align});t.textContent=dateLabel(tick.date);svg.append(t)}
  }
  for(const gap of gaps){if(!small)svg.append(S('line',{x1:gap.x,x2:gap.x,y1:top,y2:bottom,stroke:'var(--chart-label, #657789)','stroke-width':1,'stroke-dasharray':'3 4',class:'trend-gap'}))}
  if(!small&&selected){const pos=dayPositions.find(d=>d.date===selected);if(pos)svg.append(S('line',{x1:pos.x,x2:pos.x,y1:top,y2:bottom,stroke:'var(--ink, #17283e)','stroke-width':1.5,'stroke-opacity':.55,class:'trend-selected-guide','data-date':selected}))}
@@ -54,6 +55,11 @@ function chartSVG(model,small,selected,onPick){
   if(!small&&onPick){const hit=S('circle',{cx:p.x,cy:p.y,r:12,fill:'transparent',class:'trend-point-hit','data-date':p.date});const title=S('title');title.textContent=dateLabel(p.date)+' · '+resultLabel(p.record);hit.append(title);hit.addEventListener('click',()=>onPick(p.date));svg.append(hit)}
  }
  return svg
+}
+export function systemChart(rows,domain,focus,band=true){
+ const model=trendModel(rows,{width:340,height:150,domain,band});if(!model)return null;
+ if(focus&&focus>=domain.start&&focus<=domain.end&&!model.dayPositions.some(p=>p.date===focus)){const first=dayTime(domain.start),last=dayTime(domain.end),x=first===last?(model.left+model.right)/2:model.left+(model.right-model.left)*(dayTime(focus)-first)/(last-first);model.dayPositions.push({date:focus,x})}
+ const svg=chartSVG(model,false,focus,null);svg.setAttribute('class','system-graph-svg');svg.setAttribute('aria-label','Ortak tarih ölçeğinde '+rows[0].name+' grafiği; birim '+(rows[0].unit==='1'?'boyutsuz':rows[0].unit)+'. Her grafiğin değer ekseni ayrıdır.');svg.dataset.start=domain.start;svg.dataset.end=domain.end;return svg
 }
 export function sparkline(rows){const model=trendModel(rows,{width:100,height:27,axes:false,limit:12,band:false});return model?chartSVG(model,true,null,null):null}
 function textValue(value,unit){return value===null?'—':String(round(value))+(unit&&unit!=='1'?' '+unit:'')}

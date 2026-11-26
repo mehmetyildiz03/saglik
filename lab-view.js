@@ -4,7 +4,7 @@ import {latestGroups,measurementKey,changeSummary,exact} from './measurement.js'
 import {filterPeriod} from './dashboard.js';
 const byId=new Map(catalogue.map(t=>[t[0],t]));
 const searchIndex=new Map(catalogue.map(t=>[t[0],norm([t[1],...t[3]].join(' '))]));
-export const defaultLabView=()=>({mode:'latest',query:'',system:'all',state:'all',period:'all',sort:'system',day:'all',pinnedOnly:false});
+export const defaultLabView=()=>({mode:'latest',query:'',system:'all',state:'all',period:'all',sort:'system',day:'all',pinnedOnly:false,graphFocus:'',graphPage:0,graphBand:true});
 export function rowCategory(r){return byId.get(r.testId)?.[2]||'other'}
 export function searchMatch(r,query){const tokens=norm(query).split(/\s+/).filter(Boolean);if(!tokens.length)return true;const hay=norm([r.name,searchIndex.get(r.testId)||'',r.lab||'',r.method||'',r.unit||''].join(' '));return tokens.every(t=>hay.includes(t))}
 export function stateFor(records){if(records.length!==1)return 'review';const s=status(records[0]);return s==='Aralık altında'||s==='Aralık üstünde'?'out':s==='Aralık içinde'?'in':'review'}
