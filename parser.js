@@ -2,6 +2,7 @@ import {catalogue,norm} from './catalog.js';
 import {parseResult,isQualitativeTest,qualitativeValue} from './measurement.js';
 const aliases={
  'mg/dL':['mg/dl','mg/dℓ'], 'g/dL':['g/dl'], 'ng/mL':['ng/ml'], 'pg/mL':['pg/ml'],
+ 'mg/L':['mg/l'], 'g/L':['g/l'], 'ng/dL':['ng/dl'], 'mEq/L':['mEq/l'], 'U/L':['U/l'], 'IU/L':['IU/l'],
  'µg/dL':['ug/dL','μg/dL','mcg/dL','µg/dl'], 'µg/L':['ug/L','μg/L','mcg/L'],
  'µmol/L':['umol/L','μmol/L'], 'µIU/mL':['uIU/mL','μIU/mL','µIU/ml'],
  'mmol/L':['mmol/l'], 'mIU/L':['mIU/l'], 'pmol/L':['pmol/l'], 'nmol/L':['nmol/l'],
@@ -24,6 +25,7 @@ const flagPattern='H|L|Y|D|Yüksek|Düşük|\\*';
 const headPattern=new RegExp('^(?:('+flagPattern+')\\s+)?((?:<=|>=|<|>|≤|≥)?\\s*-?\\d+(?:[.,]\\d+)?)(?:\\s+('+flagPattern+'))?(?:\\s+(.+))?$','i');
 const trailingFlag=new RegExp('(?:^|\\s)('+flagPattern+')$','i');
 function parseReference(suffix){
+ if(suffix&&/^(?:Ref\.?|Referans(?: aralığı)?)\s*:/iu.test(suffix)){suffix=suffix.replace(/^(?:Ref\.?|Referans(?: aralığı)?)\s*:\s*/iu,'');if(!suffix)return null}
  if(!suffix)return {low:null,high:null,referenceText:''};
  const b=suffix.match(/^(-?\d+(?:[.,]\d+)?)\s*[-–−]\s*(-?\d+(?:[.,]\d+)?)$/);
  if(b){const low=num(b[1]),high=num(b[2]);return low!==null&&high!==null&&low<=high?{low,high,referenceText:''}:null}
@@ -34,8 +36,8 @@ export function parseLine(line){
  const raw=String(line).trim();if(!raw||raw.length>500)return null;
  const text=raw.replace(/\s+/g,' ');const found=[];
  for(const {t,a} of names){
-  const name=a.trim().replace(/\s+/g,' ');if(norm(text.slice(0,name.length))!==norm(name)||!/\s/.test(text.charAt(name.length)))continue;
-  const rest=text.slice(name.length).trim();
+  const name=a.trim().replace(/\s+/g,' ');if(norm(text.slice(0,name.length))!==norm(name)||!/[ :]/.test(text.charAt(name.length)))continue;
+  const rest=text.slice(name.length).trim().replace(/^:\s*/,'');
   if(isQualitativeTest(t[0])){
    const fields=rest.split(/\s+(?:Ref\.?|Referans)\s*:\s*/i);if(fields.length>2)continue;
    const result=qualitativeValue(fields[0],t[0]);const ref=fields[1]===undefined?'':qualitativeValue(fields[1],t[0]);
@@ -59,7 +61,24 @@ export function parseLine(line){
  const distinct=new Map(found.map(r=>[JSON.stringify([r.testId,r.value,r.comparator,r.resultText,r.unit,r.low,r.high,r.referenceText,r.reportedFlag]),r]));
  return distinct.size===1?[...distinct.values()][0]:null;
 }
-export function parseRows(rows){const recognized=[],unresolved=[];for(const {text,page} of rows){if(!text.trim())continue;const r=parseLine(text);if(r)recognized.push({...r,page});else unresolved.push({text,page});}return {recognized,unresolved}}
+export function unresolvedReason(line){
+ const raw=String(line).trim(),text=raw.replace(/\s+/g,' ');if(raw.length>500)return 'long';
+ const known=names.some(({a})=>{const n=a.trim().replace(/\s+/g,' ');return norm(text.slice(0,n.length))===norm(n)&&(text.length===n.length||/[ :]/.test(text.charAt(n.length)))});
+ return known?'fields':'identity'
+}
+export function parseRows(rows){const recognized=[],unresolved=[];let count=0;for(const {text,page} of rows){if(!text.trim())continue;if(++count>10000)throw Error('Rapor 10.000 metin satırı sınırını aşıyor. Daha küçük parçalara ayır. Hiçbir kayıt kaydedilmedi.');const r=parseLine(text);if(r)recognized.push({...r,page});else unresolved.push({text,page,reason:unresolvedReason(text)});}return {recognized,unresolved}}
+export function repairLine(source,edited){
+ if(!source||typeof source.text!=='string'||!source.text.trim()||source.text.length>500)return null;
+ const parsed=parseLine(edited);if(!parsed)return null;
+ // The edited text is not the original report. Keep original raw line and page, do not invent original flags/units.
+ return {...parsed,page:source.page??null,raw:source.text,rawUnit:'',reportedFlag:'',repaired:true}
+}
+export function pdfTextRows(items,page){
+ const tokens=items.filter(i=>typeof i?.str==='string'&&i.str.trim()&&Number.isFinite(i.transform?.[4])&&Number.isFinite(i.transform?.[5])).map(i=>({x:i.transform[4],y:i.transform[5],text:i.str}));
+ tokens.sort((a,b)=>b.y-a.y||a.x-b.x);const bands=[];
+ for(const token of tokens){let band=bands.at(-1);if(!band||Math.abs(band.y-token.y)>2){band={y:token.y,items:[]};bands.push(band)}band.items.push(token)}
+ return bands.map(b=>({page,text:b.items.sort((a,b)=>a.x-b.x).map(i=>i.text).join(' ').trim()}))
+}
 
 export async function extractPDF(file,onProgress=()=>{}){
  if(!file||file.size>20*1024*1024)throw Error('PDF en fazla 20 MB olabilir.');
@@ -71,16 +90,14 @@ export async function extractPDF(file,onProgress=()=>{}){
  const task=pdfjs.getDocument({data,isEvalSupported:false,enableXfa:false,cMapUrl:new URL('./vendor/cmaps/',import.meta.url).href,cMapPacked:true,standardFontDataUrl:new URL('./vendor/standard_fonts/',import.meta.url).href,wasmUrl:new URL('./vendor/wasm/',import.meta.url).href});
  try{
  const doc=await task.promise;if(doc.numPages>50)throw Error('En fazla 50 sayfalık PDF desteklenir.');
- const rows=[];
+ const rows=[],emptyPages=[];
  for(let page=1;page<=doc.numPages;page++){
  onProgress(page,doc.numPages);const pg=await doc.getPage(page),tc=await pg.getTextContent();
- const bands=[];
- for(const item of tc.items){if(!('str' in item)||!item.str.trim())continue;const [, , , ,x,y]=item.transform;let band=bands.find(b=>Math.abs(b.y-y)<=2);if(!band){band={y,items:[]};bands.push(band)}band.items.push({x,text:item.str});}
- bands.sort((a,b)=>b.y-a.y);for(const b of bands){rows.push({page,text:b.items.sort((a,b)=>a.x-b.x).map(i=>i.text).join(' ').trim()});}
+ const pageRows=pdfTextRows(tc.items,page);if(!pageRows.length)emptyPages.push(page);for(const row of pageRows){if(rows.length>=10000)throw Error('Rapor 10.000 metin satırı sınırını aşıyor. Daha küçük parçalara ayır.');rows.push(row)}
  pg.cleanup();
  }
  if(!rows.length)throw Error('Metin bulunamadı. Taranmış PDF/OCR henüz desteklenmiyor.');
- return parseRows(rows);
+ return {...parseRows(rows),pageCount:doc.numPages,emptyPages};
  }finally{await task.destroy()}
 }
 export function parseText(text){if(text.length>200000)throw Error('Metin çok uzun.');return parseRows(text.split(/\r?\n/).map(text=>({text,page:null})))}

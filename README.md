@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.17.0
+# Pera Sağlık · v0.18.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -73,3 +73,6 @@ Tahliller → Grafikler sekmesi. Ortak tarih ekseni, ayrı birim ve değer eksen
 
 ## v0.17 — Tarih bağlamı ve sağlık geçmişi
 Tek tahlil grafiğinde ortak zaman ekseninde tahlil, bildirilen ilaç başlangıç/bitiş ve not işaretleri; ayrı olay tarihi seçimi ve kesik kılavuz, özgün kayda geçiş. Ölçüm seçimi ve istatistikleri değişmez. Grafik dışındaki olaylar Geçmiş sayfasında bulunur. Geçmiş ekranı olay günü seçimi, tür/dönem filtresi, kaynak etiketi, günün tüm tahlillerini açma ve o tarihle not/ilaç kaydı başlatmayı destekler. Tarih eşleşmesi nedensellik, ilaç uyumu, klinik etki veya tedavi önerisi değildir. Kasa şeması değişmez.
+
+## v0.18 — Rapor inceleme ve düzeltme
+Kesin ad/birim eşlemeleri korunarak iki nokta ile ayrılmış tahlil adı, açık referans etiketi ve bazı eşdeğer birim yazımları kabul edilir. PDF metin bantları belirli sırada oluşturulur; metinsiz sayfalar ayrıca bildirilir. 200 aday kesmesi kaldırıldı; 40 satırlık sayfalarda arama, rapor sayfası ve onay durumu filtreleri. Onaylar sayfa değişiminde korunur, veri/ortak metadata değişince kaldırılır. Geçersiz veya tarihsiz aday seçilemez. Okunmayan satır açık neden ile gösterilir; kullanıcı rapora bakarak tam satır düzeltirse yeni onaysız aday oluşur ve özgün kaynak satırı/sayfası korunur. Seçilmeyen/çözümlenmeyen adayları bırakmadan önce açık onay gerekir. Yerel OCR araştırıldı; görüntü tabanlı PDF okumayı henüz desteklemiyoruz. Kasa şeması değişmez.
