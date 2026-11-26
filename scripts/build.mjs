@@ -1,6 +1,6 @@
 import {mkdir,cp,rm,copyFile,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-const assets=['style.css','design.css','atlas.css','explore.css','analysis.css','app.js','core.js','catalog.js','parser.js','body-map.js','health.js','evidence.js','measurement.js','dashboard.js','physiology.js','lab-view.js','trend-view.js','appearance.js','atlas.js','explore.js','system-graphs.js'];
+const assets=['style.css','design.css','atlas.css','explore.css','analysis.css','app.js','core.js','catalog.js','parser.js','body-map.js','health.js','evidence.js','measurement.js','dashboard.js','physiology.js','lab-view.js','trend-view.js','appearance.js','atlas.js','explore.js','system-graphs.js','event-view.js'];
 const pkg=JSON.parse(await readFile('package.json','utf8'));
 const hash=createHash('sha256');for(const p of ['index.html','package.json',...assets])hash.update(p+'\0').update(await readFile(p)).update('\0');
 const release=hash.digest('hex').slice(0,20),dir='assets/'+release,root='dist/'+dir;
