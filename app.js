@@ -12,6 +12,7 @@ import {systemNames,systemSummary,systemIcon} from './atlas.js';
 import {newExploration,exploreView} from './explore.js';
 import {defaultLabView,labView,byDay,rowCategory,compareSelectedDates,visibleScope} from './lab-view.js';
 import {evidence,forTest,forGroup} from './evidence.js';
+import {catalogueView,terminologyInfo} from './terminology.js';
 import {timeline,activeMedication,nonHDL} from './health.js';
 import {timelineView} from './event-view.js';
 import {exact,resultLabel,inputResult,parseResult,isQualitativeTest,safeReference,latestGroups,changeSummary,referenceTextValid,measurementKey,trendConnections} from './measurement.js';
@@ -199,7 +200,7 @@ function labDetails(c,rows){
  const numericDates=new Set(rows.filter(exact).map(x=>x.date));if(numericDates.size)c.append(trendPanel(rows,selected.date,today(),(date,id)=>openLabDetail({key:labDetail.key,date,id}),{wide:labExpanded&&desktopMedia.matches,events:timeline(data,profileId),onEventOpen:openHealthEvent,onTimeline:openTimelineDate}));
  const history=panel('Ölçüm geçmişi',null,'lab-history'),historyList=el('div',undefined,'lab-history-list');let shown=30;
  function drawHistory(){historyList.replaceChildren();for(const day of days.slice(0,shown)){const b=btn('',()=>openLabDetail({key:labDetail.key,date:day.date,id:null}),'lab-history-day');b.setAttribute('aria-pressed',String(day.date===selected.date));b.append(el('strong',shortLabDate(day.date)),el('span',day.records.length===1?resultLabel(day.records[0]):day.records.length+' ölçüm'),el('small',day.records.length===1?status(day.records[0]):'Ayrı inceleme'));historyList.append(b)}if(days.length>shown)historyList.append(btn('30 tarih daha göster',()=>{shown+=30;drawHistory()}))}drawHistory();history.append(historyList);c.append(history);
- const original=el('details',undefined,'panel lab-original');original.append(el('summary','Rapor ayrıntıları'));if(focus.length>1)original.open=true;const body=el('div');recordList(focus,body,'labs');original.append(body);c.append(original);
+ const original=el('details',undefined,'panel lab-original');original.append(el('summary','Rapor ayrıntıları'));if(focus.length>1)original.open=true;const body=el('div');recordList(focus,body,'labs');original.append(body);const term=terminologyInfo(r.testId);if(term)original.append(term);c.append(original);
  if(!numericDates.size)c.append(el('p','Sayısal grafik yok: nitel veya sınır bildiren sonuçlar kesin sayıya çevrilmez.','muted lab-graph-note'));
  if(currentProfile().referenceMode!=='context'){const refs=forTest(r.testId);if(refs.length){const science=el('details',undefined,'panel lab-original');science.append(el('summary','Bilimsel bilgi · '+refs.length+' kaynak'));for(const src of refs)science.append(sourceMini(src));c.append(science)}}
 }
@@ -273,8 +274,8 @@ function sourceMini(src){
 }
 function scienceNew(c){
  head(c,'Bilim kütüphanen','Her bilgi, kaynak ve kullanım sınırı ile birlikte. Referans aralığı ve karar eşiği aynı şey değildir.');
- const overview=el('div',undefined,'cards');overview.append(metric('Kaynak kaydı',evidence.length,'Sürümlü kaynak kataloğu','✺','mint'),metric('Bilgi türleri',4,'Aralık, araştırma, eşik, kılavuz/bağlam','◉','lilac'),metric('Otomatik tanı',0,'Kaynaklar eğitim içindir','✓','blue'));c.append(overview);
- const chooser=panel('Hangi sistemi öğrenmek istersin?');const select=fieldSelect(chooser,'system','Sağlık sistemi',[['all','Tüm kaynaklar'],...systems.filter(s=>s[0]!=='other').map(s=>[s[0],s[1]])],scienceFilter);const target=el('div',undefined,'evidence-grid');chooser.append(target);function draw(){scienceFilter=select.value;target.replaceChildren();const rows=scienceFilter==='all'?evidence:forGroup(scienceFilter);for(const src of rows)target.append(sourceMini(src));if(!rows.length)target.append(el('div','Bu sistem için kaynak incelemesi devam ediyor.','empty'))}select.onchange=draw;draw();c.append(chooser);
+ const overview=el('div',undefined,'cards');overview.append(metric('Tahlil kataloğu',catalogue.length,'Desteklenen ölçüm kimliği','✺','mint'),metric('Kaynak kaydı',evidence.length,'Bilimsel bağlam ve terminoloji','◉','lilac'),metric('Otomatik tanı',0,'Kaynaklar eğitim içindir','✓','blue'));c.append(overview);catalogueView(c);
+ const chooser=panel('Hangi sistemi öğrenmek istersin?');const select=fieldSelect(chooser,'system','Sağlık sistemi',[['all','Tüm kaynaklar'],...systems.map(s=>[s[0],s[1]])],scienceFilter);const target=el('div',undefined,'evidence-grid');chooser.append(target);function draw(){scienceFilter=select.value;target.replaceChildren();const rows=scienceFilter==='all'?evidence:forGroup(scienceFilter);for(const src of rows)target.append(sourceMini(src));if(!rows.length)target.append(el('div','Bu sistem için kaynak incelemesi devam ediyor.','empty'))}select.onchange=draw;draw();c.append(chooser);
  const rules=panel('Bilimsel güvenlik sözleşmesi');rules.append(el('p','Rapor aralığı: raporda belirtilen aralık değiştirilmez.'),el('p','Popülasyon referansı: yaş, cinsiyet, örnek türü ve yönteme bağlıdır.'),el('p','Klinik karar eşiği: belirli kılavuz koşuluna aittir.'),el('p','Tedavi hedefi: bireysel klinik risk ve hekim kararı gerektirir.'));c.append(rules);
 }
 function referenceSettings(){

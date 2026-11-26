@@ -2,7 +2,7 @@ import {catalogue,norm} from './catalog.js';
 import {parseResult,isQualitativeTest,qualitativeValue} from './measurement.js';
 const aliases={
  'mg/dL':['mg/dl','mg/dℓ'], 'g/dL':['g/dl'], 'ng/mL':['ng/ml'], 'pg/mL':['pg/ml'],
- 'mg/L':['mg/l'], 'g/L':['g/l'], 'ng/dL':['ng/dl'], 'mEq/L':['mEq/l'], 'U/L':['U/l'], 'IU/L':['IU/l'],
+ 'mg/L':['mg/l'], 'g/L':['g/l'], 'ng/dL':['ng/dl'], 'ng/L':['ng/l'], 'mEq/L':['mEq/l'], 'U/L':['U/l'], 'IU/L':['IU/l'],
  'µg/dL':['ug/dL','μg/dL','mcg/dL','µg/dl'], 'µg/L':['ug/L','μg/L','mcg/L'],
  'µmol/L':['umol/L','μmol/L'], 'µIU/mL':['uIU/mL','μIU/mL','µIU/ml'],
  'mmol/L':['mmol/l'], 'mIU/L':['mIU/l'], 'pmol/L':['pmol/l'], 'nmol/L':['nmol/l'],
@@ -16,7 +16,7 @@ const aliases={
 };
 const unitSyntax=s=>String(s??'').trim().replace(/\s*\/\s*/g,'/').replace(/\s+/g,' ');
 export function normalizeUnit(raw,allowed){
- const u=unitSyntax(raw);const matches=allowed.filter(x=>[x,...(aliases[x]||[])].some(a=>unitSyntax(a)===u));
+ const u=unitSyntax(raw),explicit=allowed.filter(x=>unitSyntax(x)===u);if(explicit.length)return explicit.length===1?explicit[0]:null;const matches=allowed.filter(x=>(aliases[x]||[]).some(a=>unitSyntax(a)===u));
  return matches.length===1?matches[0]:null;
 }
 function num(s){const t=String(s??'').trim();if(!/^-?\d+(?:[.,]\d+)?$/.test(t))return null;const n=Number(t.replace(',','.'));return Number.isFinite(n)?n:null}

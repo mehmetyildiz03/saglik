@@ -88,13 +88,14 @@ export const evidence=[
     "year": "2024",
     "kind": "Klinik bağlam",
     "url": "https://doi.org/10.1016/j.kint.2023.10.016",
-    "section": "Practice points 1.1.1 and 1.1.3",
+    "section": "Practice points 1.1.1.1, 1.1.3.1–2; recommendation 1.1.2.1",
     "tests": [
       "egfr",
       "uacr",
-      "creat"
+      "creat",
+      "serum-cystatin-c"
     ],
-    "summary": "Böbrek değerlendirmesinde glomerüler filtrasyon ve idrar albümini birlikte ele alınır. Kroniklik en az üç aylık süre ile kanıtlanır; tek anormal ölçüm kronik hastalık tanısı değildir.",
+    "summary": "Böbrek değerlendirmesinde GFR ve idrar albümini birlikte ele alınır. Riskli erişkinlerde kreatinin temelli eGFR, sistatin C varsa ikisini birlikte kullanan eGFR önerilir. Kroniklik en az üç ay ile kanıtlanır; tek anormal ölçüm yeterli değildir.",
     "scope": "Otomatik evreleme, akut/kronik ayrımı veya böbrek risk puanı yapılmaz."
   },
   {
@@ -244,6 +245,61 @@ export const evidence=[
     ],
     "summary": "ALT, AST, ALP ve GGT doku hasarıyla ilişkili olabilir; albümin ve pıhtılaşma göstergeleri farklı bilgi verir. AST ve ALP karaciğer dışı dokulardan da kaynaklanabilir.",
     "scope": "Eğitim yazısı; klinik kılavuz veya tanı motoru değildir."
+  },
+  {
+    "id": "chem-tr",
+    "group": "all",
+    "title": "Türkiye'de biyokimya referans aralığı araştırması",
+    "org": "Ozarda ve arkadaşları · Clin Chem Lab Med",
+    "year": "2014",
+    "kind": "Popülasyon referans çalışması",
+    "url": "https://doi.org/10.1515/cclm-2014-0228",
+    "section": "Abstract, Methods and Results",
+    "tests": [
+      "creat",
+      "uric",
+      "glucose",
+      "tg",
+      "hdl",
+      "alt",
+      "ggt"
+    ],
+    "summary": "Yedi bölgeden 28 laboratuvarın topladığı 3.066 örnekte 25 biyokimya analiti araştırıldı. Serumlar Abbott sistemiyle merkezi olarak ölçüldü; bazı analitlerde yaş, cinsiyet ve BKİ etkileri görüldü.",
+    "scope": "Türkiye referans araştırması adayı; güncel yöntem, yaş/cinsiyet ve örnek uyumu ile sayısal tablolar doğrulanmadan uygulama aralığı yapılmaz."
+  },
+  {
+    "id": "iron-identity",
+    "group": "nutrient",
+    "title": "Demir bağlama kapasitesi ve transferrin ölçümleri",
+    "org": "Regenstrief Institute · LOINC",
+    "year": "2026",
+    "kind": "Ölçüm kimliği / terminoloji",
+    "url": "https://loinc.org/2500-7/",
+    "section": "Fully-specified name, related names and example units; 2501-5, 3034-6, 2502-3 ayrıca",
+    "tests": [
+      "serum-tibc",
+      "serum-uibc",
+      "serum-transferrin",
+      "serum-tsat"
+    ],
+    "summary": "Toplam ve doymamış demir bağlama kapasitesi, transferrin konsantrasyonu ve satürasyonu farklı ölçüm kimlikleridir. Özgün birim ve numune bilgisi korunur.",
+    "scope": "Terminoloji kaynağı; klinik tanı eşiği, hesaplama veya otomatik LOINC ataması değildir. Kaynaklar tahlil kataloğunda ayrı bağlantılıdır."
+  },
+  {
+    "id": "ldh-method",
+    "group": "other",
+    "title": "LDH için reaksiyon yönü önemlidir",
+    "org": "Regenstrief Institute · LOINC",
+    "year": "2026",
+    "kind": "Ölçüm yöntemi / terminoloji",
+    "url": "https://loinc.org/2532-0/",
+    "section": "Status information and map-to guidance",
+    "tests": [
+      "serum-ldh-lp",
+      "serum-ldh-pl"
+    ],
+    "summary": "Yöntemsiz LDH terimi önerilmemektedir; laktat-pirüvat ve ters yönlü reaksiyon ölçümleri ayrı kimliklerdir.",
+    "scope": "Yöntem tanımlanmadan otomatik eşleştirme, ortak referans veya katsayı dönüşümü yapılmaz."
   }
 ];
 export const forTest=id=>evidence.filter(s=>s.tests.includes(id));

@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.18.0
+# Pera Sağlık · v0.19.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -76,3 +76,6 @@ Tek tahlil grafiğinde ortak zaman ekseninde tahlil, bildirilen ilaç başlangı
 
 ## v0.18 — Rapor inceleme ve düzeltme
 Kesin ad/birim eşlemeleri korunarak iki nokta ile ayrılmış tahlil adı, açık referans etiketi ve bazı eşdeğer birim yazımları kabul edilir. PDF metin bantları belirli sırada oluşturulur; metinsiz sayfalar ayrıca bildirilir. 200 aday kesmesi kaldırıldı; 40 satırlık sayfalarda arama, rapor sayfası ve onay durumu filtreleri. Onaylar sayfa değişiminde korunur, veri/ortak metadata değişince kaldırılır. Geçersiz veya tarihsiz aday seçilemez. Okunmayan satır açık neden ile gösterilir; kullanıcı rapora bakarak tam satır düzeltirse yeni onaysız aday oluşur ve özgün kaynak satırı/sayfası korunur. Seçilmeyen/çözümlenmeyen adayları bırakmadan önce açık onay gerekir. Yerel OCR araştırıldı; görüntü tabanlı PDF okumayı henüz desteklemiyoruz. Kasa şeması değişmez.
+
+## v0.19 — Tahlil kimliği ve bilimsel katalog (P6 ilk dilim)
+78 → 90 ölçüm kimliği. Demir bağlama kapasitesi, transferrin ve satürasyon, sistatin C, serum lipaz/amilaz, total CK/protein, intakt PTH ve iki ayrı LDH reaksiyon yönü. Yeni kimlikler açık serum bilgisi gerektirir; örnek türü veya yöntem eksikse otomatik eşleştirme yapılmaz. Hemogramda açık boşluk/kısaltma varyantları genişletildi. eGFR'nin iki eski katalog birim yazımı artık kendi tam yazımıyla kullanılabilir; kayıt geçmişi birleştirilmedi. Diğer → Bilim'de aranabilir tahlil kataloğu, birim ve 12 yeni kimlik için LOINC kaynak terimi bağlantısı. Katalog kodu otomatik atanmış hasta LOINC kodu değildir. Türkiye biyokimya araştırması, KDIGO sistatin C bağlamı ve yöntem ayrımı kaynakları eklendi. Evrensel referans aralığı veya birim dönüşümü yok. Kasa şeması değişmez.

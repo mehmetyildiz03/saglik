@@ -6,7 +6,8 @@ export const catalogue=[
     [
       "HGB",
       "Hb",
-      "Hemoglobin"
+      "Hemoglobin",
+      "Hemoglobin (HGB)"
     ],
     [
       "g/dL",
@@ -19,7 +20,8 @@ export const catalogue=[
     "blood",
     [
       "RBC",
-      "Eritrosit"
+      "Eritrosit",
+      "Eritrosit sayısı"
     ],
     [
       "10^6/µL",
@@ -33,7 +35,8 @@ export const catalogue=[
     "blood",
     [
       "WBC",
-      "Lökosit"
+      "Lökosit",
+      "Lökosit sayısı"
     ],
     [
       "10^3/µL",
@@ -47,7 +50,8 @@ export const catalogue=[
     "blood",
     [
       "PLT",
-      "Trombosit"
+      "Trombosit",
+      "Trombosit sayısı"
     ],
     [
       "10^3/µL",
@@ -118,7 +122,9 @@ export const catalogue=[
     [
       "NEUT#",
       "NEU#",
-      "Nötrofil #"
+      "Nötrofil #",
+      "NEUT #",
+      "NEU #"
     ],
     [
       "10^3/µL",
@@ -131,7 +137,8 @@ export const catalogue=[
     "blood",
     [
       "LYM#",
-      "Lenfosit #"
+      "Lenfosit #",
+      "LYM #"
     ],
     [
       "10^3/µL",
@@ -144,7 +151,9 @@ export const catalogue=[
     "blood",
     [
       "NEUT%",
-      "NEU%"
+      "NEU%",
+      "NEUT %",
+      "NEU %"
     ],
     [
       "%"
@@ -155,7 +164,8 @@ export const catalogue=[
     "Lenfosit %",
     "blood",
     [
-      "LYM%"
+      "LYM%",
+      "LYM %"
     ],
     [
       "%"
@@ -604,7 +614,9 @@ export const catalogue=[
     [
       "MONO#",
       "MON#",
-      "Monosit #"
+      "Monosit #",
+      "MONO #",
+      "MON #"
     ],
     [
       "10^3/µL",
@@ -619,7 +631,9 @@ export const catalogue=[
     [
       "MONO%",
       "MON%",
-      "Monosit %"
+      "Monosit %",
+      "MONO %",
+      "MON %"
     ],
     [
       "%"
@@ -632,7 +646,9 @@ export const catalogue=[
     [
       "EOS#",
       "EO#",
-      "Eozinofil #"
+      "Eozinofil #",
+      "EOS #",
+      "EO #"
     ],
     [
       "10^3/µL",
@@ -647,7 +663,9 @@ export const catalogue=[
     [
       "EOS%",
       "EO%",
-      "Eozinofil %"
+      "Eozinofil %",
+      "EOS %",
+      "EO %"
     ],
     [
       "%"
@@ -660,7 +678,9 @@ export const catalogue=[
     [
       "BASO#",
       "BAS#",
-      "Bazofil #"
+      "Bazofil #",
+      "BASO #",
+      "BAS #"
     ],
     [
       "10^3/µL",
@@ -675,7 +695,9 @@ export const catalogue=[
     [
       "BASO%",
       "BAS%",
-      "Bazofil %"
+      "Bazofil %",
+      "BASO %",
+      "BAS %"
     ],
     [
       "%"
@@ -991,6 +1013,162 @@ export const catalogue=[
       "Ürobilinojen (idrar, nitel)"
     ],
     []
+  ],
+  [
+    "serum-tibc",
+    "Toplam demir bağlama kapasitesi (serum)",
+    "nutrient",
+    [
+      "Serum TIBC",
+      "TIBC (serum)",
+      "Serum toplam demir bağlama kapasitesi"
+    ],
+    [
+      "µg/dL",
+      "mg/dL"
+    ]
+  ],
+  [
+    "serum-uibc",
+    "Doymamış demir bağlama kapasitesi (serum)",
+    "nutrient",
+    [
+      "Serum UIBC",
+      "UIBC (serum)",
+      "Serum doymamış demir bağlama kapasitesi"
+    ],
+    [
+      "µg/dL"
+    ]
+  ],
+  [
+    "serum-transferrin",
+    "Transferrin (serum)",
+    "nutrient",
+    [
+      "Serum transferrin"
+    ],
+    [
+      "mg/dL",
+      "g/L"
+    ]
+  ],
+  [
+    "serum-tsat",
+    "Transferrin satürasyonu (serum)",
+    "nutrient",
+    [
+      "Serum TSAT",
+      "TSAT (serum)",
+      "Serum transferrin satürasyonu"
+    ],
+    [
+      "%"
+    ]
+  ],
+  [
+    "serum-cystatin-c",
+    "Sistatin C (serum)",
+    "kidney",
+    [
+      "Serum sistatin C",
+      "Serum cystatin C",
+      "Cystatin C (serum)"
+    ],
+    [
+      "mg/L"
+    ]
+  ],
+  [
+    "serum-lipase",
+    "Lipaz (serum)",
+    "metabolism",
+    [
+      "Serum lipaz",
+      "Lipase (serum)"
+    ],
+    [
+      "U/L"
+    ]
+  ],
+  [
+    "serum-amylase",
+    "Amilaz (serum, total)",
+    "metabolism",
+    [
+      "Serum total amilaz",
+      "Total amilaz (serum)",
+      "Serum amilaz",
+      "Amilaz (serum)"
+    ],
+    [
+      "U/L"
+    ]
+  ],
+  [
+    "serum-ck",
+    "Kreatin kinaz (serum, total)",
+    "other",
+    [
+      "Serum CK",
+      "CK (serum)",
+      "Serum total CK",
+      "Serum kreatin kinaz"
+    ],
+    [
+      "U/L"
+    ]
+  ],
+  [
+    "serum-ipth",
+    "İntakt parathormon (serum)",
+    "nutrient",
+    [
+      "Serum iPTH",
+      "iPTH (serum)",
+      "Serum intakt PTH"
+    ],
+    [
+      "pg/mL",
+      "ng/L"
+    ]
+  ],
+  [
+    "serum-protein-total",
+    "Total protein (serum)",
+    "liver",
+    [
+      "Serum total protein",
+      "Serum protein (total)"
+    ],
+    [
+      "g/dL",
+      "g/L"
+    ]
+  ],
+  [
+    "serum-ldh-lp",
+    "LDH (serum, laktat → pirüvat)",
+    "other",
+    [
+      "Serum LDH (laktat-pirüvat)",
+      "LDH (serum, L-P)"
+    ],
+    [
+      "U/L"
+    ]
+  ],
+  [
+    "serum-ldh-pl",
+    "LDH (serum, pirüvat → laktat)",
+    "other",
+    [
+      "Serum LDH (pirüvat-laktat)",
+      "LDH (serum, P-L)"
+    ],
+    [
+      "U/L"
+    ]
   ]
 ];
 export const systems=[
@@ -1104,4 +1282,4 @@ export const sources=[
   }
 ];
 export function norm(s){return String(s).trim().toLocaleLowerCase('tr').normalize('NFD').replace(/\p{M}/gu,'').replace(/ı/g,'i').replace(/\s+/g,' ')}
-export function findTest(s){const k=norm(s);return catalogue.find(t=>[t[1],...t[3]].some(a=>norm(a)===k))||null}
+export function findTest(s){const k=norm(s);const matches=catalogue.filter(t=>[t[1],...t[3]].some(a=>norm(a)===k));return matches.length===1?matches[0]:null}
