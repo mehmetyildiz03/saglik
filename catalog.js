@@ -1239,8 +1239,8 @@ export const systems=[
     "other",
     "Diğer ölçümler",
     "＋",
-    "Katalog dışı kayıtlar",
-    "Birim veya örnek türü belirsiz kayıtlar otomatik eşleştirilmez."
+    "Diğer ölçümler ve katalog dışı kayıtlar",
+    "Birim, örnek türü veya yöntem belirsiz kayıtlar otomatik eşleştirilmez."
   ]
 ];
 export const sources=[

@@ -12,7 +12,7 @@ import {systemNames,systemSummary,systemIcon} from './atlas.js';
 import {newExploration,exploreView} from './explore.js';
 import {defaultLabView,labView,byDay,rowCategory,compareSelectedDates,visibleScope} from './lab-view.js';
 import {evidence,forTest,forGroup} from './evidence.js';
-import {catalogueView,terminologyInfo} from './terminology.js';
+import {catalogueView,terminologyInfo,termReferences} from './terminology.js';
 import {timeline,activeMedication,nonHDL} from './health.js';
 import {timelineView} from './event-view.js';
 import {exact,resultLabel,inputResult,parseResult,isQualitativeTest,safeReference,latestGroups,changeSummary,referenceTextValid,measurementKey,trendConnections} from './measurement.js';
@@ -274,7 +274,7 @@ function sourceMini(src){
 }
 function scienceNew(c){
  head(c,'Bilim kütüphanen','Her bilgi, kaynak ve kullanım sınırı ile birlikte. Referans aralığı ve karar eşiği aynı şey değildir.');
- const overview=el('div',undefined,'cards');overview.append(metric('Tahlil kataloğu',catalogue.length,'Desteklenen ölçüm kimliği','✺','mint'),metric('Kaynak kaydı',evidence.length,'Bilimsel bağlam ve terminoloji','◉','lilac'),metric('Otomatik tanı',0,'Kaynaklar eğitim içindir','✓','blue'));c.append(overview);catalogueView(c);
+ const overview=el('div',undefined,'cards');overview.append(metric('Tahlil kataloğu',catalogue.length,'Desteklenen ölçüm kimliği','✺','mint'),metric('Kaynak kaydı',evidence.length,'Bilimsel bağlam ve terminoloji','◉','lilac'),metric('Kaynak terimi',Object.keys(termReferences).length,'Ölçüm kimliği araştırması','✓','blue'));c.append(overview);catalogueView(c);
  const chooser=panel('Hangi sistemi öğrenmek istersin?');const select=fieldSelect(chooser,'system','Sağlık sistemi',[['all','Tüm kaynaklar'],...systems.map(s=>[s[0],s[1]])],scienceFilter);const target=el('div',undefined,'evidence-grid');chooser.append(target);function draw(){scienceFilter=select.value;target.replaceChildren();const rows=scienceFilter==='all'?evidence:forGroup(scienceFilter);for(const src of rows)target.append(sourceMini(src));if(!rows.length)target.append(el('div','Bu sistem için kaynak incelemesi devam ediyor.','empty'))}select.onchange=draw;draw();c.append(chooser);
  const rules=panel('Bilimsel güvenlik sözleşmesi');rules.append(el('p','Rapor aralığı: raporda belirtilen aralık değiştirilmez.'),el('p','Popülasyon referansı: yaş, cinsiyet, örnek türü ve yönteme bağlıdır.'),el('p','Klinik karar eşiği: belirli kılavuz koşuluna aittir.'),el('p','Tedavi hedefi: bireysel klinik risk ve hekim kararı gerektirir.'));c.append(rules);
 }
