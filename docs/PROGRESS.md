@@ -19,3 +19,5 @@
 
 2026-11-26 — Manuel devam: otomasyon kapalı olduğu doğrulandı ve kullanıcı isteğiyle açık bırakılmadı. P2 aday 2906be4fab1187537457a73b0310b3ff0a383305, 72/72 birim ve Chromium kabulü başarılı (https://github.com/mehmetyildiz03/saglik/actions/runs/45721245105). Üç tarihli masaüstü ve mobil ekran görüntüleri incelendi; mobil filtreler açıkken ilk sonuç aşağıda kalıyor, ileride yoğunluk iyileştirilebilir. Main'e beklenen SHA ile fast-forward yapıldı, Pages sonucu ayrı doğrulanacak.
 - P3 v0.16.0 aday: sistem grafik sekmesi, ortak tarih ekseni, ayrı değer eksenleri/birimler, ortak tarih odağı, 12 grafik/sayfa, tarih/dönem/filtre ve kayıt erişimi. Aday CI bekliyor; main'e alınmadı. Gerçek rapor, performans ve kapsamlı erişilebilirlik kabulü açık.
+
+- P3 ilk CI: 76/76 birim, build başarılı; Chromium testi iki aynı başlık yüzünden durdu (https://github.com/mehmetyildiz03/saglik/actions/runs/45824220235). Ayrıntı paneli seçicisi sınırlandırıldı, boş dönem görünümüne dönem seçicisi eklendi ve bu geçiş test edildi. Yeni CI gerekli; başarısız aday yayınlanmadı.
