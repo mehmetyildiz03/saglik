@@ -7,7 +7,7 @@ const b64=b=>{const a=new Uint8Array(b);let s='';for(let i=0;i<a.length;i+=16384
 const bytes=s=>Uint8Array.from(atob(s),x=>x.charCodeAt(0));
 const short=(s,max=160)=>typeof s==='string'&&s.trim().length>0&&s.length<=max;
 const optional=(s,max=160)=>s===undefined||s===''||short(s,max);
-export const today=()=>new Date().toLocaleDateString('sv-SE');
+export const today=()=>{const d=new Date();return String(d.getFullYear()).padStart(4,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 export function validDate(s){if(typeof s!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;const d=new Date(s+'T00:00:00Z');return Number.isFinite(+d)&&d.toISOString().slice(0,10)===s&&s>='1900-01-01'&&s<=today()}
 export function empty(){return {version:3,profiles:[{id:'self',name:'Ben',referenceMode:'report'}],labs:[],notes:[],meds:[]}}
 export function normalizeData(input){

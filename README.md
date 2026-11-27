@@ -1,4 +1,4 @@
-# Pera Sağlık · v0.19.0
+# Pera Sağlık · v0.20.0
 
 Bağımsız kişisel sağlık kayıtları uygulaması. Ana BioNexus deposunun verileri ve özel kaynak kodu kopyalanmaz. Sağlık verisi sunucuya gönderilmez; cihazdaki şifreli kasada saklanır. Klinik tanı veya tedavi aracı değildir.
 
@@ -79,3 +79,6 @@ Kesin ad/birim eşlemeleri korunarak iki nokta ile ayrılmış tahlil adı, aç�
 
 ## v0.19 — Tahlil kimliği ve bilimsel katalog (P6 ilk dilim)
 78 → 90 ölçüm kimliği. Demir bağlama kapasitesi, transferrin ve satürasyon, sistatin C, serum lipaz/amilaz, total CK/protein, intakt PTH ve iki ayrı LDH reaksiyon yönü. Yeni kimlikler açık serum bilgisi gerektirir; örnek türü veya yöntem eksikse otomatik eşleştirme yapılmaz. Hemogramda açık boşluk/kısaltma varyantları genişletildi. eGFR'nin iki eski katalog birim yazımı artık kendi tam yazımıyla kullanılabilir; kayıt geçmişi birleştirilmedi. Diğer → Bilim'de aranabilir tahlil kataloğu, birim ve 12 yeni kimlik için LOINC kaynak terimi bağlantısı. Katalog kodu otomatik atanmış hasta LOINC kodu değildir. Türkiye biyokimya araştırması, KDIGO sistatin C bağlamı ve yöntem ayrımı kaynakları eklendi. Evrensel referans aralığı veya birim dönüşümü yok. Kasa şeması değişmez.
+
+## v0.20 — Ürün kalitesi (P7 ilk dilim)
+Tahlil/karşılaştırma ve özgün kayıt listeleri 40 kayıtlık sayfalara, analiz tablosu 30 kayıtlık sayfalara ayrılır. Genel bakış ve sistem sayfası aynı modern analiz grafiğini kullanır. 180 üstü ölçümde seçili tarih çevresindeki kesintisiz pencere açıkça etiketlenir; tüm dönem istatistikleri ve ham tablo korunur. Çok yoğun sistem grafiğinde kısa dönem veya ayrıntıya geçiş gerekir. Geçici rapor incelemesi sekmeler arası gezinmede korunur; kilit/profil değişimi/temizleme ile silinir. Şifreli yedek boyutu ve tüm profillerin kapsamı görünür, kilit ekranından da mevcut şifreli yedek indirilebilir. Depolama hatası ve başka sekme değişiklikleri açıkça bildirilir. Kasa şeması değişmez; bu tam güvenlik/WCAG veya klinik doğrulama iddiası değildir.

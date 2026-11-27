@@ -27,12 +27,12 @@ export function safeReference(r){if(r.referenceText)return r.referenceText;if(Nu
 export function measurementKey(r){return JSON.stringify([r.testId||r.name,r.unit,r.lab||'',r.method||''])}
 export function latestGroups(rows){
  const groups=new Map();for(const r of rows){const k=measurementKey(r),a=groups.get(k)||[];a.push(r);groups.set(k,a)}
- return [...groups.entries()].map(([key,all])=>{const dates=[...new Set(all.map(r=>r.date))].sort().reverse(),latest=all.filter(r=>r.date===dates[0]);return {key,all,latest,ambiguous:latest.length!==1,date:dates[0]}}).sort((a,b)=>b.date.localeCompare(a.date)||a.key.localeCompare(b.key))
+ return [...groups.entries()].map(([key,all])=>{let date=all[0].date;for(const r of all)if(r.date>date)date=r.date;const latest=all.filter(r=>r.date===date);return {key,all,latest,ambiguous:latest.length!==1,date}}).sort((a,b)=>b.date.localeCompare(a.date)||a.key.localeCompare(b.key))
 }
 export function changeSummary(group){
  if(!group||group.ambiguous||!exact(group.latest[0]))return null;
- const previousDates=[...new Set(group.all.filter(r=>r.date<group.date).map(r=>r.date))].sort().reverse();
- if(!previousDates.length)return null;const previous=group.all.filter(r=>r.date===previousDates[0]);
+ let previousDate='';for(const r of group.all)if(r.date<group.date&&r.date>previousDate)previousDate=r.date;
+ if(!previousDate)return null;const previous=group.all.filter(r=>r.date===previousDate);
  if(previous.length!==1||!exact(previous[0]))return null;
  const delta=group.latest[0].value-previous[0].value;
  if(!Number.isFinite(delta))return null;

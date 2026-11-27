@@ -1,5 +1,6 @@
 import {validDate} from './core.js';
 import {filterPeriod} from './dashboard.js';
+import {pageWindow,PLOT_SIZE} from './quality.js';
 export const eventKinds=[['all','Tümü'],['lab','Tahliller'],['medicine','İlaç kayıtları'],['note','Notlar']];
 const originLabel={manual:'Manuel',pdf:'PDF',text:'Metin aktarımı'};
 export function eventDays(events,{kind='all',start=null,end=null,period='all',today=null}={}){
@@ -16,17 +17,17 @@ const ns='http://www.w3.org/2000/svg',labels={lab:'Tahlil',medicine:'İlaç',not
 function S(tag,attrs={}){const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));return n}
 function E(tag,txt,cls){const n=document.createElement(tag);if(txt!==undefined)n.textContent=txt;if(cls)n.className=cls;return n}
 function B(txt,fn,cls){const n=E('button',txt,cls);n.type='button';n.onclick=fn;return n}
-const dateLabel=d=>new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(d+'T00:00:00Z'));
+const dateFormatter=new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});const dateLabel=d=>dateFormatter.format(new Date(d+'T00:00:00Z'));
 function select(root,name,label,options,value,fn){const l=E('label',label),s=E('select');s.name=name;s.setAttribute('aria-label',label);for(const [id,t] of options){const o=E('option',t);o.value=id;s.append(o)}s.value=value;s.onchange=()=>fn(s.value);l.append(s);root.append(l);return s}
-function eventRows(root,day,onOpen,limit=20){
+function eventRows(root,day,onOpen,page=0){
  root.replaceChildren();if(!day){root.append(E('p','Bir olay tarihi seç.','muted'));return}
- for(const e of day.events.slice(0,limit)){
+ const window=pageWindow(day.events,page,20);for(const e of window.items){
   const row=E('article',undefined,'event-record');row.dataset.kind=e.kind;row.dataset.eventDate=e.date;
   const symbol=E('span',e.kind==='lab'?'●':e.kind==='medicine'?(e.phase==='end'?'■':'▲'):'◆','event-symbol');symbol.setAttribute('aria-hidden','true');
   const body=E('div',undefined,'event-record-body'),meta=E('small',e.kind==='lab'?'Tahlil · '+(originLabel[e.origin]||'Kaynak belirtilmemiş'):e.kind==='medicine'?'Bildirilen ilaç kullanım kaydı':'Kişisel not');body.append(meta,E('strong',e.title),E('p',e.detail));if(e.reference)body.append(E('small','Rapor ref. '+e.reference));row.append(symbol,body);
   const open=B('Aç →',()=>onOpen(e),'event-open quiet');open.setAttribute('aria-label',e.title+' kaydını aç');row.append(open);root.append(row)
  }
- if(day.events.length>limit){const more=B('20 olay daha göster',()=>{eventRows(root,day,onOpen,limit+20);root.querySelectorAll('.event-open')[limit]?.focus()},'quiet');root.append(more)}
+ if(window.count>1){const pager=E('div',undefined,'quality-pager'),prev=B('← Önceki',()=>move(-1),'quiet'),next=B('Sonraki →',()=>move(1),'quiet'),label=E('span',window.start+1+'–'+window.end+' / '+window.total+' olay');prev.disabled=window.index===0;next.disabled=window.index===window.count-1;label.setAttribute('role','status');pager.append(prev,label,next);root.append(pager);function move(delta){eventRows(root,day,onOpen,window.index+delta);root.querySelector('.event-open')?.focus({preventScroll:true})}}
 }
 function dayCounts(day){return [['lab','tahlil'],['medicine','ilaç olayı'],['note','not']].filter(([k])=>day.counts[k]).map(([k,label])=>day.counts[k]+' '+label).join(' · ')}
 function stripSVG(days,{start,end,width,left,right},selected,onPick){
@@ -48,7 +49,7 @@ export function eventStrip(events,domain,{kind='all',focus='',onKind,onFocus,onO
  function draw(){
   const days=eventDays(events,{kind,start:domain.start,end:domain.end});if(focus&&!days.some(d=>d.date===focus)){focus='';onFocus('')}
   date.replaceChildren();for(const [v,t] of [['','Olay tarihi seç'],...days.map(d=>[d.date,dateLabel(d.date)+' · '+d.events.length+' olay'])]){const o=E('option',t);o.value=v;date.append(o)}date.value=focus;date.disabled=!days.length;
-  plot.replaceChildren();if(days.length)plot.append(stripSVG(days,domain,focus,pick));else plot.append(E('p','Bu tarih aralığında seçili türde olay yok.','muted'));
+  plot.replaceChildren();if(days.length>PLOT_SIZE)plot.append(E('p',days.length+' olay günü · Yoğun işaretler yerine tarih seçicisinden bir günü incele. Tüm günler seçilebilir.','muted'));else if(days.length)plot.append(stripSVG(days,domain,focus,pick));else plot.append(E('p','Bu tarih aralığında seçili türde olay yok.','muted'));
   details.replaceChildren();if(focus){const day=days.find(d=>d.date===focus);details.append(E('p',dateLabel(focus)+' · '+dayCounts(day),'event-day-label'));const list=E('div');details.append(list);eventRows(list,day,onOpen)}
  }
  draw();return root

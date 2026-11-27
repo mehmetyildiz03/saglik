@@ -5,6 +5,7 @@ import {exact,resultLabel,safeReference,measurementKey} from './measurement.js';
 import {rangeBand} from './dashboard.js';
 import {axisDates,systemChart} from './trend-view.js';
 import {systemNames,systemIcon} from './atlas.js';
+import {PLOT_SIZE} from './quality.js';
 export const GRAPH_PAGE_SIZE=12;
 const systemOrder=new Map(systems.map((s,i)=>[s[0],i]));
 export function systemGraphModel(rows,opts,end){
@@ -22,7 +23,7 @@ export function graphSelection(item,focus){
  const date=focus||item.date,records=item.history.filter(r=>r.date===date);
  return {date,records,latest:date===item.date,state:records.length?stateFor(records):'missing'};
 }
-const dateLabel=d=>new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'short',year:'2-digit',timeZone:'UTC'}).format(new Date(d+'T00:00:00Z'));
+const dateFormatter=new Intl.DateTimeFormat('tr-TR',{day:'numeric',month:'short',year:'2-digit',timeZone:'UTC'});const dateLabel=d=>dateFormatter.format(new Date(d+'T00:00:00Z'));
 function E(tag,txt,cls){const n=document.createElement(tag);if(txt!==undefined)n.textContent=txt;if(cls)n.className=cls;return n}
 function B(txt,fn,cls){const b=E('button',txt,cls);b.type='button';b.onclick=fn;return b}
 function selectField(root,name,label,options,value,fn){const l=E('label',label),s=E('select');s.name=name;s.setAttribute('aria-label',label);for(const [v,t] of options){const o=E('option',t);o.value=v;s.append(o)}s.value=value;s.onchange=()=>fn(s.value);l.append(s);root.append(l);return s}
@@ -35,10 +36,10 @@ function renderCard(item,domain,focus,showBand,onOpen){
  card.append(read);
  const plot=E('div',undefined,'system-graph-plot'),svg=systemChart(item.history,domain,selected.date,showBand);
  if(svg){plot.append(svg);const common=rangeBand(item.history);plot.append(E('small',common&&showBand?'Rapor bandı: '+common.low+' – '+common.high:common?'Ortak rapor bandı gizlendi':'Ortak rapor bandı yok','system-graph-note'))}
- else plot.append(E('p','Sayısal grafik yok. Ölçümler aşağıda korunur.','system-graph-empty'));
+ else plot.append(E('p',item.history.length>PLOT_SIZE?item.history.length+' kayıt · Ortak ekseni korumak için daha kısa dönem seç veya ayrıntıda tarih pencerelerini incele.':'Sayısal grafik yok. Ölçümler aşağıda korunur.','system-graph-empty'));
  card.append(plot);
  const records=E('div',undefined,'system-graph-records');
- if(selected.records.length){for(const r of selected.records){const b=B('',()=>onOpen({key:item.key,date:r.date,id:r.id}),'system-graph-record');b.setAttribute('aria-label',row.name+' · '+dateLabel(r.date)+' · '+resultLabel(r)+' kaydını aç');b.append(E('span',selected.records.length>1?resultLabel(r)+' · ':''),E('span',safeReference(r)?'Ref. '+safeReference(r):'Ref. belirtilmemiş'),E('span','İncele →','system-graph-open'));records.append(b)}}
+ if(selected.records.length>20){records.append(B(selected.records.length+' ayrı ölçümü aç →',()=>onOpen({key:item.key,date:selected.date,id:null}),'system-graph-record'))}else if(selected.records.length){for(const r of selected.records){const b=B('',()=>onOpen({key:item.key,date:r.date,id:r.id}),'system-graph-record');b.setAttribute('aria-label',row.name+' · '+dateLabel(r.date)+' · '+resultLabel(r)+' kaydını aç');b.append(E('span',selected.records.length>1?resultLabel(r)+' · ':''),E('span',safeReference(r)?'Ref. '+safeReference(r):'Ref. belirtilmemiş'),E('span','İncele →','system-graph-open'));records.append(b)}}
  else records.append(B('Son kayıt: '+dateLabel(item.date)+' →',()=>onOpen({key:item.key,date:item.date,id:item.id}),'system-graph-record'));
  card.append(records);return card
 }
